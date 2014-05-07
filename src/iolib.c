@@ -1,13 +1,13 @@
 
-#include <bwio.h>
 #include <ts7200.h>
+#include <bwio.h>
 #include <iolib.h>
 
 #include "iobuffer.h"
 
 static struct IOBuffer buf;
 
-int print_init() {
+int io_init() {
     iobuf_init( &buf );
 
     if ( bwsetfifo( COM1, OFF ) || bwsetfifo( COM2, OFF ) ){

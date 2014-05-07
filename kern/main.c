@@ -1,11 +1,26 @@
 
 #include <bwio.h>
+#include <iolib.h>
 #include <ts7200.h>
 
 int main( int argc, char* argv[] ) {
-    char running = 1;
-    char str[] = "Hello World\n\r";
-    
+    // char running = 1;
+    // char str[] = "Hello World\n\r";
+
+    int result = io_init();
+    if( result ) return result;
+
+    putc( 'a' );
+    putc( 'b' );
+    putc( 'c' );
+    putc( 'd' );
+    putc( 'e' );
+    putc( 'f' );
+    putc( 'g' );
+
+
+
+/*    
     bwsetfifo( COM2, OFF );
 	bwputstr( COM2, str );
 	bwputw( COM2, 10, '*', str );
@@ -15,6 +30,7 @@ int main( int argc, char* argv[] ) {
 	bwprintf( COM2, "%x worlds for %d people.\n\r", -23, 723 );
 	str[0] = bwgetc( COM2 );
 	bwprintf( COM2, "%s", str );
+*/
 
 	return 0;
 }

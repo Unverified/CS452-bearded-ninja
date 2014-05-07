@@ -1,9 +1,9 @@
 	.file	"iolib.c"
 	.text
 	.align	2
-	.global	print_init
-	.type	print_init, %function
-print_init:
+	.global	io_init
+	.type	io_init, %function
+io_init:
 	@ args = 0, pretend = 0, frame = 4
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
@@ -45,7 +45,7 @@ print_init:
 .L8:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L7+8)
 	.word	buf(GOT)
-	.size	print_init, .-print_init
+	.size	io_init, .-io_init
 	.section	.rodata
 	.align	2
 .LC0:
