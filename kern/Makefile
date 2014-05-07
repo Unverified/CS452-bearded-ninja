@@ -31,6 +31,7 @@ $(TARGET): $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
 
 install:
+	chmod a+r $(TARGET)
 	cp $(TARGET) /u/cs452/tftp/ARM/nillerbr
 
 clean:

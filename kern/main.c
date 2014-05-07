@@ -21,10 +21,6 @@ int main( int argc, char* argv[] ) {
 	str[0] = bwgetc( COM2 );
 	bwprintf( COM2, "%s", str );
 
-    while( running ) {
-
-    }
-
 	return 0;
 }
 

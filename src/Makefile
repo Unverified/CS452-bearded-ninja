@@ -36,5 +36,8 @@ $(BWIO): $(BWIO_DEP)
 $(BUFIO): $(BUFIO_DEP)
 	$(AR) $(ARFLAGS) lib$@ $^
 
+install:
+	cp lib$(BWIO) lib$(BUFIO) ../lib
+
 clean:
 	$(RM) -f *.s *.a *.o
