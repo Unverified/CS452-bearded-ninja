@@ -37,6 +37,3 @@ install:
 clean:
 	$(RM) -f $(TARGET) *.s *.o $(TARGET:.elf=.map)
 
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
-
