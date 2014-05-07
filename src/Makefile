@@ -22,7 +22,7 @@ BWIO = bwio.a
 BWIO_DEP = bwio.o
 
 BUFIO = bufio.a
-BUFIO_DEP = iobuffer.o
+BUFIO_DEP = iolib.o iobuffer.o
 
 STDLIB = stdlib.a
 STDLIB_DEP = stdlib.o

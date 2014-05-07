@@ -1,5 +1,5 @@
 
 int print_init();
 int putc( char c );
-int term_poll();
+int io_poll();
 

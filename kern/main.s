@@ -1,40 +1,4 @@
 	.file	"main.c"
-	.text
-	.align	2
-	.global	memcpy
-	.type	memcpy, %function
-memcpy:
-	@ args = 0, pretend = 0, frame = 12
-	@ frame_needed = 1, uses_anonymous_args = 0
-	mov	ip, sp
-	stmfd	sp!, {fp, ip, lr, pc}
-	sub	fp, ip, #4
-	sub	sp, sp, #12
-	str	r0, [fp, #-16]
-	str	r1, [fp, #-20]
-	str	r2, [fp, #-24]
-	b	.L2
-.L3:
-	ldr	r3, [fp, #-20]
-	ldrb	r3, [r3, #0]	@ zero_extendqisi2
-	ldr	r2, [fp, #-16]
-	strb	r3, [r2, #0]
-	ldr	r3, [fp, #-16]
-	add	r3, r3, #1
-	str	r3, [fp, #-16]
-	ldr	r3, [fp, #-20]
-	add	r3, r3, #1
-	str	r3, [fp, #-20]
-.L2:
-	ldr	r3, [fp, #-24]
-	sub	r3, r3, #1
-	str	r3, [fp, #-24]
-	ldr	r3, [fp, #-24]
-	cmn	r3, #1
-	bne	.L3
-	sub	sp, fp, #12
-	ldmfd	sp, {fp, sp, pc}
-	.size	memcpy, .-memcpy
 	.section	.rodata
 	.align	2
 .LC1:
@@ -68,14 +32,14 @@ main:
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
 	sub	sp, sp, #24
-	ldr	sl, .L9
-.L8:
+	ldr	sl, .L4
+.L3:
 	add	sl, pc, sl
 	str	r0, [fp, #-36]
 	str	r1, [fp, #-40]
 	mov	r3, #1
 	strb	r3, [fp, #-17]
-	ldr	r3, .L9+4
+	ldr	r3, .L4+4
 	add	r3, sl, r3
 	sub	r2, fp, #31
 	mov	ip, #14
@@ -96,32 +60,32 @@ main:
 	mov	r2, #42
 	bl	bwputw(PLT)
 	mov	r0, #1
-	ldr	r3, .L9+8
+	ldr	r3, .L4+8
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
 	mov	r0, #1
-	ldr	r3, .L9+12
+	ldr	r3, .L4+12
 	add	r3, sl, r3
 	mov	r1, r3
-	ldr	r3, .L9+16
+	ldr	r3, .L4+16
 	add	r3, sl, r3
 	mov	r2, r3
 	mov	r3, #23
 	bl	bwprintf(PLT)
 	mov	r0, #1
-	ldr	r3, .L9+20
+	ldr	r3, .L4+20
 	add	r3, sl, r3
 	mov	r1, r3
 	mvn	r2, #22
 	mov	r3, #1
 	bl	bwprintf(PLT)
 	mov	r0, #1
-	ldr	r3, .L9+24
+	ldr	r3, .L4+24
 	add	r3, sl, r3
 	mov	r1, r3
 	mvn	r2, #22
-	ldr	r3, .L9+28
+	ldr	r3, .L4+28
 	bl	bwprintf(PLT)
 	mov	r0, #1
 	bl	bwgetc(PLT)
@@ -130,7 +94,7 @@ main:
 	strb	r3, [fp, #-31]
 	sub	r2, fp, #31
 	mov	r0, #1
-	ldr	r3, .L9+32
+	ldr	r3, .L4+32
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
@@ -138,10 +102,10 @@ main:
 	mov	r0, r3
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
-.L10:
+.L5:
 	.align	2
-.L9:
-	.word	_GLOBAL_OFFSET_TABLE_-(.L8+8)
+.L4:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L3+8)
 	.word	.LC0(GOTOFF)
 	.word	.LC1(GOTOFF)
 	.word	.LC2(GOTOFF)

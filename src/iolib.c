@@ -21,7 +21,7 @@ int putc( const char c ) {
     return iobuf_store( &buf, c );
 }
 
-int term_poll() {
+int io_poll() {
     char c;
     if( iobuf_get( &buf, &c ) ){
         bwprintf( COM2, "failed to get thing from buffer" );

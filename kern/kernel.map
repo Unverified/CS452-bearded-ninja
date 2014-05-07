@@ -1,6 +1,7 @@
 Archive member included because of file (symbol)
 
 ../lib/libbwio.a(bwio.o)      main.o (bwsetfifo)
+../lib/libstdlib.a(stdlib.o)  main.o (memcpy)
 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
                               ../lib/libbwio.a(bwio.o) (__udivsi3)
 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
@@ -28,54 +29,59 @@ bss             0x0000000000000000        0x0
  *(.bss)
                 0x0000000000000000                _BssEnd = .
 
-text            0x0000000000000000     0x1068
+text            0x0000000000000000     0x1090
  *(.text)
- .text          0x0000000000000000      0x1b0 main.o
-                0x0000000000000000                memcpy
-                0x0000000000000068                main
- .text          0x00000000000001b0      0xc54 ../lib/libbwio.a(bwio.o)
-                0x0000000000000528                bwputr
-                0x0000000000000a94                bwi2a
-                0x00000000000001b0                bwsetfifo
-                0x0000000000000384                bwputc
-                0x00000000000007e4                bwa2d
-                0x0000000000000278                bwsetspeed
-                0x0000000000000448                c2x
-                0x000000000000088c                bwa2i
-                0x000000000000072c                bwgetc
-                0x0000000000000950                bwui2a
-                0x0000000000000af8                bwformat
-                0x0000000000000624                bwputw
-                0x0000000000000dcc                bwprintf
-                0x00000000000004a8                bwputx
-                0x00000000000005a8                bwputstr
- .text          0x0000000000000e04      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
-                0x0000000000000e04                __udivsi3
-                0x0000000000000efc                __aeabi_uidivmod
- .text          0x0000000000000f14       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
-                0x0000000000000f14                __umodsi3
- .text          0x0000000000000fe0        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
-                0x0000000000000fe0                __aeabi_ldiv0
-                0x0000000000000fe0                __div0
-                0x0000000000000fe0                __aeabi_idiv0
+ .text          0x0000000000000000      0x148 main.o
+                0x0000000000000000                main
+ .text          0x0000000000000148      0xc54 ../lib/libbwio.a(bwio.o)
+                0x00000000000004c0                bwputr
+                0x0000000000000a2c                bwi2a
+                0x0000000000000148                bwsetfifo
+                0x000000000000031c                bwputc
+                0x000000000000077c                bwa2d
+                0x0000000000000210                bwsetspeed
+                0x00000000000003e0                c2x
+                0x0000000000000824                bwa2i
+                0x00000000000006c4                bwgetc
+                0x00000000000008e8                bwui2a
+                0x0000000000000a90                bwformat
+                0x00000000000005bc                bwputw
+                0x0000000000000d64                bwprintf
+                0x0000000000000440                bwputx
+                0x0000000000000540                bwputstr
+ .text          0x0000000000000d9c       0x90 ../lib/libstdlib.a(stdlib.o)
+                0x0000000000000d9c                memcpy
+                0x0000000000000e04                abs
+ .text          0x0000000000000e2c      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x0000000000000e2c                __udivsi3
+                0x0000000000000f24                __aeabi_uidivmod
+ .text          0x0000000000000f3c       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x0000000000000f3c                __umodsi3
+ .text          0x0000000000001008        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x0000000000001008                __aeabi_ldiv0
+                0x0000000000001008                __div0
+                0x0000000000001008                __aeabi_idiv0
  *(.got)
  *(.got.plt)
- .got.plt       0x0000000000000fe4        0xc main.o
-                0x0000000000000fe4                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x000000000000100c        0xc main.o
+                0x000000000000100c                _GLOBAL_OFFSET_TABLE_
  *(.rodata)
- .rodata        0x0000000000000ff0       0x78 main.o
+ .rodata        0x0000000000001018       0x78 main.o
  *(.glue_7)
  *(.glue_7t)
 
 .rel.dyn
 LOAD main.o
 LOAD ../lib/libbwio.a
+LOAD ../lib/libbufio.a
+LOAD ../lib/libstdlib.a
 LOAD /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a
 OUTPUT(kernel.elf elf32-littlearm)
 
-.comment        0x0000000000000000       0x24
+.comment        0x0000000000000000       0x36
  .comment       0x0000000000000000       0x12 main.o
  .comment       0x0000000000000012       0x12 ../lib/libbwio.a(bwio.o)
+ .comment       0x0000000000000024       0x12 ../lib/libstdlib.a(stdlib.o)
 
 .debug_line     0x0000000000000000      0x14f
  .debug_line    0x0000000000000000       0x86 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)

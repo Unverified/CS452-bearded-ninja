@@ -2,10 +2,6 @@
 #include <bwio.h>
 #include <ts7200.h>
 
-void memcpy( char *destaddr, char *srcaddr, int len ) {
-    while ( len-- ) *destaddr++ = *srcaddr++;
-}
-
 int main( int argc, char* argv[] ) {
     char running = 1;
     char str[] = "Hello World\n\r";
