@@ -24,7 +24,10 @@ BWIO_DEP = bwio.o
 BUFIO = bufio.a
 BUFIO_DEP = iobuffer.o
 
-all: $(BWIO) $(BUFIO) 
+STDLIB = stdlib.a
+STDLIB_DEP = stdlib.o
+
+all: $(STDLIB) $(BWIO) $(BUFIO) 
 
 %.o: %.c
 	$(XCC) -S $(CFLAGS) $<
@@ -36,8 +39,11 @@ $(BWIO): $(BWIO_DEP)
 $(BUFIO): $(BUFIO_DEP)
 	$(AR) $(ARFLAGS) lib$@ $^
 
+$(STDLIB): $(STDLIB_DEP)
+	$(AR) $(ARFLAGS) lib$@ $^
+
 install:
-	cp lib$(BWIO) lib$(BUFIO) ../lib
+	cp lib$(BWIO) lib$(BUFIO) lib$(STDLIB) ../lib
 
 clean:
 	$(RM) -f *.s *.a *.o

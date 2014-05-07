@@ -2,7 +2,6 @@
 #include <bwio.h>
 #include <ts7200.h>
 
-
 void memcpy( char *destaddr, char *srcaddr, int len ) {
     while ( len-- ) *destaddr++ = *srcaddr++;
 }
