@@ -18,6 +18,10 @@ int iobuf_init( struct IOBuffer *buffer ) {
     return 0;
 }
 
+int iobuf_empty( struct IOBuffer *buffer ) {
+    return buffer-> size == 0;
+}
+
 int iobuf_get( struct IOBuffer *buffer, char *element ) {
   if( buffer->size == 0 ) return IOBUFFER_EMPTY;
 

@@ -15,6 +15,7 @@ struct IOBuffer {
 
 
 int iobuf_init( struct IOBuffer *buffer );
+int iobuf_empty( struct IOBuffer *buffer );
 int iobuf_get( struct IOBuffer *buffer, char *element );
 int iobuf_store( struct IOBuffer *buffer, char element );
 

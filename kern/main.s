@@ -22,25 +22,19 @@ main:
 	str	r3, [fp, #-28]
 	b	.L4
 .L2:
-	mov	r0, #97
-	bl	putc(PLT)
-	mov	r0, #98
-	bl	putc(PLT)
-	mov	r0, #99
-	bl	putc(PLT)
-	mov	r0, #100
-	bl	putc(PLT)
-	mov	r0, #101
+	mov	r0, #102
 	bl	putc(PLT)
 	mov	r0, #102
 	bl	putc(PLT)
-	mov	r0, #103
+	mov	r0, #102
+	bl	putc(PLT)
+	mov	r0, #102
 	bl	putc(PLT)
 .L5:
 	bl	io_poll(PLT)
 	mov	r3, r0
-	cmp	r3, #0
-	bne	.L6
+	cmp	r3, #2
+	beq	.L6
 	b	.L5
 .L6:
 	mov	r3, #0

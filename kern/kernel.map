@@ -26,56 +26,57 @@ data            0x0000000000000000        0x0
  *(.data)
                 0x0000000000000000                _DataEnd = .
 
-bss             0x0000000000000000       0x70
+bss             0x0000000000000000       0xe0
                 0x0000000000000000                _BssStart = .
  *(.bss)
- .bss           0x0000000000000000       0x70 ../lib/libbufio.a(iolib.o)
-                0x0000000000000070                _BssEnd = .
+ .bss           0x0000000000000000       0xe0 ../lib/libbufio.a(iolib.o)
+                0x00000000000000e0                _BssEnd = .
 
-text            0x0000000000000070     0x125c
+text            0x00000000000000e0     0x12bc
  *(.text)
- .text          0x0000000000000070       0xa0 main.o
-                0x0000000000000070                main
- .text          0x0000000000000110      0x180 ../lib/libbufio.a(iolib.o)
-                0x0000000000000110                io_init
-                0x0000000000000200                io_poll
-                0x0000000000000190                putc
- .text          0x0000000000000290      0x1bc ../lib/libbufio.a(iobuffer.o)
-                0x00000000000002e4                iobuf_init
-                0x00000000000003b8                iobuf_store
-                0x0000000000000328                iobuf_get
- .text          0x000000000000044c      0xc54 ../lib/libbwio.a(bwio.o)
-                0x00000000000007c4                bwputr
-                0x0000000000000d30                bwi2a
-                0x000000000000044c                bwsetfifo
-                0x0000000000000620                bwputc
-                0x0000000000000a80                bwa2d
-                0x0000000000000514                bwsetspeed
-                0x00000000000006e4                c2x
-                0x0000000000000b28                bwa2i
-                0x00000000000009c8                bwgetc
-                0x0000000000000bec                bwui2a
-                0x0000000000000d94                bwformat
-                0x00000000000008c0                bwputw
-                0x0000000000001068                bwprintf
-                0x0000000000000744                bwputx
-                0x0000000000000844                bwputstr
- .text          0x00000000000010a0      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
-                0x00000000000010a0                __udivsi3
-                0x0000000000001198                __aeabi_uidivmod
- .text          0x00000000000011b0       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
-                0x00000000000011b0                __umodsi3
- .text          0x000000000000127c        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
-                0x000000000000127c                __aeabi_ldiv0
-                0x000000000000127c                __div0
-                0x000000000000127c                __aeabi_idiv0
+ .text          0x00000000000000e0       0x88 main.o
+                0x00000000000000e0                main
+ .text          0x0000000000000168      0x1e4 ../lib/libbufio.a(iolib.o)
+                0x0000000000000168                io_init
+                0x000000000000026c                io_poll
+                0x00000000000001fc                putc
+ .text          0x000000000000034c      0x1ec ../lib/libbufio.a(iobuffer.o)
+                0x00000000000003a0                iobuf_init
+                0x00000000000004a4                iobuf_store
+                0x0000000000000414                iobuf_get
+                0x00000000000003e4                iobuf_empty
+ .text          0x0000000000000538      0xc54 ../lib/libbwio.a(bwio.o)
+                0x00000000000008b0                bwputr
+                0x0000000000000e1c                bwi2a
+                0x0000000000000538                bwsetfifo
+                0x000000000000070c                bwputc
+                0x0000000000000b6c                bwa2d
+                0x0000000000000600                bwsetspeed
+                0x00000000000007d0                c2x
+                0x0000000000000c14                bwa2i
+                0x0000000000000ab4                bwgetc
+                0x0000000000000cd8                bwui2a
+                0x0000000000000e80                bwformat
+                0x00000000000009ac                bwputw
+                0x0000000000001154                bwprintf
+                0x0000000000000830                bwputx
+                0x0000000000000930                bwputstr
+ .text          0x000000000000118c      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x000000000000118c                __udivsi3
+                0x0000000000001284                __aeabi_uidivmod
+ .text          0x000000000000129c       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x000000000000129c                __umodsi3
+ .text          0x0000000000001368        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x0000000000001368                __aeabi_ldiv0
+                0x0000000000001368                __div0
+                0x0000000000001368                __aeabi_idiv0
  *(.got)
- .got           0x0000000000001280        0x4 ../lib/libbufio.a(iolib.o)
+ .got           0x000000000000136c        0x8 ../lib/libbufio.a(iolib.o)
  *(.got.plt)
- .got.plt       0x0000000000001284        0xc ../lib/libbufio.a(iolib.o)
-                0x0000000000001284                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x0000000000001374        0xc ../lib/libbufio.a(iolib.o)
+                0x0000000000001374                _GLOBAL_OFFSET_TABLE_
  *(.rodata)
- .rodata        0x0000000000001290       0x3c ../lib/libbufio.a(iolib.o)
+ .rodata        0x0000000000001380       0x1c ../lib/libbufio.a(iolib.o)
  *(.glue_7)
  *(.glue_7t)
 

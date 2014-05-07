@@ -53,6 +53,25 @@ iobuf_init:
 	ldmfd	sp, {r3, fp, sp, pc}
 	.size	iobuf_init, .-iobuf_init
 	.align	2
+	.global	iobuf_empty
+	.type	iobuf_empty, %function
+iobuf_empty:
+	@ args = 0, pretend = 0, frame = 4
+	@ frame_needed = 1, uses_anonymous_args = 0
+	mov	ip, sp
+	stmfd	sp!, {fp, ip, lr, pc}
+	sub	fp, ip, #4
+	sub	sp, sp, #4
+	str	r0, [fp, #-16]
+	ldr	r3, [fp, #-16]
+	ldr	r3, [r3, #8]
+	cmp	r3, #0
+	movne	r3, #0
+	moveq	r3, #1
+	mov	r0, r3
+	ldmfd	sp, {r3, fp, sp, pc}
+	.size	iobuf_empty, .-iobuf_empty
+	.align	2
 	.global	iobuf_get
 	.type	iobuf_get, %function
 iobuf_get:
@@ -67,11 +86,11 @@ iobuf_get:
 	ldr	r3, [fp, #-16]
 	ldr	r3, [r3, #8]
 	cmp	r3, #0
-	bne	.L8
+	bne	.L10
 	mov	r3, #42
 	str	r3, [fp, #-24]
-	b	.L10
-.L8:
+	b	.L12
+.L10:
 	ldr	r3, [fp, #-16]
 	ldr	r1, [r3, #0]
 	ldr	r3, [fp, #-16]
@@ -91,7 +110,7 @@ iobuf_get:
 	str	r2, [r3, #8]
 	mov	r3, #0
 	str	r3, [fp, #-24]
-.L10:
+.L12:
 	ldr	r3, [fp, #-24]
 	mov	r0, r3
 	sub	sp, fp, #12
@@ -113,11 +132,11 @@ iobuf_store:
 	ldr	r3, [fp, #-16]
 	ldr	r3, [r3, #8]
 	cmp	r3, #100
-	bne	.L13
+	bne	.L15
 	mov	r3, #43
 	str	r3, [fp, #-24]
-	b	.L15
-.L13:
+	b	.L17
+.L15:
 	ldr	r3, [fp, #-16]
 	ldr	r1, [r3, #4]
 	ldr	r3, [fp, #-16]
@@ -137,7 +156,7 @@ iobuf_store:
 	str	r2, [r3, #8]
 	mov	r3, #0
 	str	r3, [fp, #-24]
-.L15:
+.L17:
 	ldr	r3, [fp, #-24]
 	mov	r0, r3
 	sub	sp, fp, #12

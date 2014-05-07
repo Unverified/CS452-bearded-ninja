@@ -10,17 +10,14 @@ int main( int argc, char* argv[] ) {
     int result = io_init();
     if( result ) return result;
 
-    putc( 'a' );
-    putc( 'b' );
-    putc( 'c' );
-    putc( 'd' );
-    putc( 'e' );
     putc( 'f' );
-    putc( 'g' );
+    putc( 'f' );
+    putc( 'f' );
+    putc( 'f' );
 
 
     while( 1 ) {
-        if( io_poll() ) break;
+        if( io_poll() == 2 ) break;
     }
 
 /*    

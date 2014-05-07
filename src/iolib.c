@@ -5,10 +5,12 @@
 
 #include "iobuffer.h"
 
-static struct IOBuffer buf;
+static struct IOBuffer oterm;
+static struct IOBuffer iterm;
 
 int io_init() {
-    iobuf_init( &buf );
+    iobuf_init( &iterm );
+    iobuf_init( &oterm );
 
     if ( bwsetfifo( COM1, OFF ) || bwsetfifo( COM2, OFF ) ){
         return -1;
@@ -17,30 +19,22 @@ int io_init() {
 }
 
 int putc( const char c ) {
-    bwprintf( COM2, "storing %c inbuf at %d\n\r", c, &buf );
-    return iobuf_store( &buf, c );
+    bwprintf( COM2, "storing %c inbuf at %d\n\r", c, &oterm );
+    return iobuf_store( &oterm, c );
 }
 
 int io_poll() {
     char c;
+    int *flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
+	int *data = (int *)( UART2_BASE + UART_DATA_OFFSET );
 
-    if( iobuf_get( &buf, &c ) ){
-        bwprintf( COM2, "failed to get thing from buffer" );
-        return -1;
-    }
+    if( iobuf_empty( &oterm )  ) return 2;
+    if( ( *flags & TXFF_MASK ) ) return 1;
 
-    bwputc( COM2, c );
-
-/*
-    if( !iobuf_empty( &buf )  ) return 2;
-    if( !( *flags & TXFF_MASK ) ) return 1;
-
-    char c;
-    if( iobuf_get( &buf, &c ) ) {
+    if( iobuf_get( &oterm, &c ) ) {
         return -1;
     }
     *data = c;
-*/
 
 	return 0;
 }
