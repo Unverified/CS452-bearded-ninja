@@ -19,6 +19,9 @@ int main( int argc, char* argv[] ) {
     putc( 'g' );
 
 
+    while( 1 ) {
+        if( io_poll() ) break;
+    }
 
 /*    
     bwsetfifo( COM2, OFF );

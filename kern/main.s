@@ -36,6 +36,13 @@ main:
 	bl	putc(PLT)
 	mov	r0, #103
 	bl	putc(PLT)
+.L5:
+	bl	io_poll(PLT)
+	mov	r3, r0
+	cmp	r3, #0
+	bne	.L6
+	b	.L5
+.L6:
 	mov	r3, #0
 	str	r3, [fp, #-28]
 .L4:
