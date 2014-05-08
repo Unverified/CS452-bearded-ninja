@@ -1,5 +1,8 @@
 
 int io_init();
-int putc( char c );
 int io_poll();
+
+int putc( char c );
+void printf( char* fmt, ... );
+int putstr( char *str );
 

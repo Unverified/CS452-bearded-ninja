@@ -2,51 +2,28 @@
 #include <bwio.h>
 #include <iolib.h>
 #include <ts7200.h>
+#include <clock.h>
 
 int main( int argc, char* argv[] ) {
     // char running = 1;
     // char str[] = "Hello World\n\r";
     int result = io_init();
-    if( result ) return result;
-    
-    unsigned char tenths = 0;
-    unsigned char secs = 0;
-    unsigned int mins = 0;
-
-    putc( 'f' );
-    putc( 'f' );
-    putc( 'f' );
-    putc( 'f' );
-    putc( 'g' );
+    if( result ) return 1;
    
-    int *ptr = TIMER3_BASE;
-    *ptr = 200;
-
-    ptr = TIMER3_CTRL;
-    *ptr = (ENABLE_MASK | MODE_MASK);
-
-    int ltick = 0;
-
-    ptr = TIMER3_VAL;
+    result = clock_init();
+    if( result ) return 2;
+    
+     
     while( 1 ) {
-        int tick = *ptr;
-
-        if ( tick > ltick ) {
-            tenths += 1;
-            if( tenths == 10 ) {
-                secs += 1;
-                tenths = 0;
-                if( secs == 60 ) {
-                    mins += 1;
-                    secs = 0;
-                }
-            }
-            bwprintf( COM2, "%d %d\n\r", tick, ltick );
-            bwprintf( COM2, "%d %d %d\n\r", mins, secs, tenths );
-        }
-
         io_poll();
-        ltick = tick;
+        if( clock_poll() ) {
+            unsigned int tenths = 0;
+            unsigned int secs = 0;
+            unsigned int mins = 0;
+
+            clock_get( &mins, &secs, &tenths );
+            printf( "%d %d %d\n\r", mins, secs, tenths );
+        }
     }
 
 /*    
