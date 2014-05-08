@@ -42,13 +42,15 @@ int clock_poll() {
             if( secs == 59 ) {
                 secs = 0;
                 mins++;
+                result = 3;
             } else {
                 secs++;
+                result = 2;
             }
         } else {
             tens++;
+            result = 1;
         }
-        result = 1;
     }
 
     last_tick = tick;

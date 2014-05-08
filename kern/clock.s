@@ -132,70 +132,73 @@ clock_poll:
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
 	sub	sp, sp, #8
-	ldr	sl, .L22
-.L21:
+	ldr	sl, .L21
+.L20:
 	add	sl, pc, sl
 	mov	r3, #0
 	str	r3, [fp, #-24]
-	ldr	r3, .L22+4
+	ldr	r3, .L21+4
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	ldr	r3, [r3, #0]
 	str	r3, [fp, #-20]
-	ldr	r3, .L22+8
+	ldr	r3, .L21+8
 	ldr	r3, [sl, r3]
 	ldr	r2, [r3, #0]
 	ldr	r3, [fp, #-20]
 	cmp	r3, r2
 	ble	.L12
-	ldr	r3, .L22+12
+	ldr	r3, .L21+12
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	cmp	r3, #9
 	bne	.L14
-	ldr	r3, .L22+12
+	ldr	r3, .L21+12
 	ldr	r2, [sl, r3]
 	mov	r3, #0
 	str	r3, [r2, #0]
-	ldr	r3, .L22+16
+	ldr	r3, .L21+16
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	cmp	r3, #59
 	bne	.L16
-	ldr	r3, .L22+16
+	ldr	r3, .L21+16
 	ldr	r2, [sl, r3]
 	mov	r3, #0
 	str	r3, [r2, #0]
-	ldr	r3, .L22+20
+	ldr	r3, .L21+20
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	add	r2, r3, #1
-	ldr	r3, .L22+20
+	ldr	r3, .L21+20
 	ldr	r3, [sl, r3]
 	str	r2, [r3, #0]
-	b	.L19
+	mov	r3, #3
+	str	r3, [fp, #-24]
+	b	.L12
 .L16:
-	ldr	r3, .L22+16
+	ldr	r3, .L21+16
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	add	r2, r3, #1
-	ldr	r3, .L22+16
+	ldr	r3, .L21+16
 	ldr	r3, [sl, r3]
 	str	r2, [r3, #0]
-	b	.L19
+	mov	r3, #2
+	str	r3, [fp, #-24]
+	b	.L12
 .L14:
-	ldr	r3, .L22+12
+	ldr	r3, .L21+12
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	add	r2, r3, #1
-	ldr	r3, .L22+12
+	ldr	r3, .L21+12
 	ldr	r3, [sl, r3]
 	str	r2, [r3, #0]
-.L19:
 	mov	r3, #1
 	str	r3, [fp, #-24]
 .L12:
-	ldr	r3, .L22+8
+	ldr	r3, .L21+8
 	ldr	r2, [sl, r3]
 	ldr	r3, [fp, #-20]
 	str	r3, [r2, #0]
@@ -203,10 +206,10 @@ clock_poll:
 	mov	r0, r3
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
-.L23:
-	.align	2
 .L22:
-	.word	_GLOBAL_OFFSET_TABLE_-(.L21+8)
+	.align	2
+.L21:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L20+8)
 	.word	T3_VAL(GOT)
 	.word	last_tick(GOT)
 	.word	tens(GOT)

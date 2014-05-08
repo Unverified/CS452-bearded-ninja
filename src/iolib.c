@@ -10,31 +10,41 @@
 static struct IOBuffer oterm;
 static struct IOBuffer iterm;
 
+static int *TERM_FLAG;
+static int *TERM_DATA;
+
+static int *TRAIN_FLAG;
+static int *TRAIN_DATA;
+
 int io_init() {
     iobuf_init( &iterm );
     iobuf_init( &oterm );
 
     bwsetspeed( COM1, 2400 ); 
 
-
     if ( bwsetfifo( COM1, OFF ) || bwsetfifo( COM2, OFF ) ){
         return -1;
     }
+		
+    TERM_FLAG = (int *)( UART2_BASE + UART_FLAG_OFFSET );
+    TERM_DATA = (int *)( UART2_BASE + UART_DATA_OFFSET );
+            
+    TRAIN_FLAG = (int *)( UART1_BASE + UART_FLAG_OFFSET );
+    TRAIN_DATA = (int *)( UART1_BASE + UART_DATA_OFFSET );
+    
     return 0;
 }
 
 int io_poll() {
     char c;
-    int *flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
-	int *data = (int *)( UART2_BASE + UART_DATA_OFFSET );
 
     if( iobuf_empty( &oterm )  ) return 2;
-    if( ( *flags & TXFF_MASK ) ) return 1;
+    if( ( *TERM_FLAG & TXFF_MASK ) ) return 1;
 
     if( iobuf_get( &oterm, &c ) ) {
         return -1;
     }
-    *data = c;
+    *TERM_DATA = c;
 
 	return 0;
 }
@@ -124,3 +134,9 @@ void printf( char *fmt, ... ) {
         va_end(va);
 }
 
+int getc( char *output ) {
+	while ( !( *TERM_FLAG & RXFF_MASK ) ) ;
+	*output = *TERM_DATA;
+
+	return 0;
+}

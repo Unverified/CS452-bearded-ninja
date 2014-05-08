@@ -41,6 +41,22 @@ io_init:
 	str	r3, [fp, #-20]
 	b	.L5
 .L4:
+	ldr	r3, .L8+12
+	ldr	r2, [sl, r3]
+	ldr	r3, .L8+16
+	str	r3, [r2, #0]
+	ldr	r3, .L8+20
+	ldr	r2, [sl, r3]
+	ldr	r3, .L8+24
+	str	r3, [r2, #0]
+	ldr	r3, .L8+28
+	ldr	r2, [sl, r3]
+	ldr	r3, .L8+32
+	str	r3, [r2, #0]
+	ldr	r3, .L8+36
+	ldr	r2, [sl, r3]
+	ldr	r3, .L8+40
+	str	r3, [r2, #0]
 	mov	r3, #0
 	str	r3, [fp, #-20]
 .L5:
@@ -53,25 +69,29 @@ io_init:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L7+8)
 	.word	iterm(GOT)
 	.word	oterm(GOT)
+	.word	TERM_FLAG(GOT)
+	.word	-2138243048
+	.word	TERM_DATA(GOT)
+	.word	-2138243072
+	.word	TRAIN_FLAG(GOT)
+	.word	-2138308584
+	.word	TRAIN_DATA(GOT)
+	.word	-2138308608
 	.size	io_init, .-io_init
 	.align	2
 	.global	io_poll
 	.type	io_poll, %function
 io_poll:
-	@ args = 0, pretend = 0, frame = 16
+	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
-	sub	sp, sp, #16
+	sub	sp, sp, #8
 	ldr	sl, .L20
 .L19:
 	add	sl, pc, sl
 	ldr	r3, .L20+4
-	str	r3, [fp, #-24]
-	ldr	r3, .L20+8
-	str	r3, [fp, #-20]
-	ldr	r3, .L20+12
 	ldr	r3, [sl, r3]
 	mov	r0, r3
 	bl	iobuf_empty(PLT)
@@ -79,10 +99,12 @@ io_poll:
 	cmp	r3, #0
 	beq	.L11
 	mov	r3, #2
-	str	r3, [fp, #-32]
+	str	r3, [fp, #-24]
 	b	.L13
 .L11:
-	ldr	r3, [fp, #-24]
+	ldr	r3, .L20+8
+	ldr	r3, [sl, r3]
+	ldr	r3, [r3, #0]
 	ldr	r3, [r3, #0]
 	mov	r3, r3, lsr #5
 	and	r3, r3, #1
@@ -90,11 +112,11 @@ io_poll:
 	cmp	r3, #0
 	beq	.L14
 	mov	r3, #1
-	str	r3, [fp, #-32]
+	str	r3, [fp, #-24]
 	b	.L13
 .L14:
-	sub	r2, fp, #25
-	ldr	r3, .L20+12
+	sub	r2, fp, #17
+	ldr	r3, .L20+4
 	ldr	r3, [sl, r3]
 	mov	r0, r3
 	mov	r1, r2
@@ -103,17 +125,18 @@ io_poll:
 	cmp	r3, #0
 	beq	.L16
 	mvn	r3, #0
-	str	r3, [fp, #-32]
+	str	r3, [fp, #-24]
 	b	.L13
 .L16:
-	ldrb	r3, [fp, #-25]	@ zero_extendqisi2
-	mov	r2, r3
-	ldr	r3, [fp, #-20]
-	str	r2, [r3, #0]
+	ldr	r3, .L20+12
+	ldr	r3, [sl, r3]
+	ldr	r2, [r3, #0]
+	ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+	str	r3, [r2, #0]
 	mov	r3, #0
-	str	r3, [fp, #-32]
+	str	r3, [fp, #-24]
 .L13:
-	ldr	r3, [fp, #-32]
+	ldr	r3, [fp, #-24]
 	mov	r0, r3
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
@@ -121,9 +144,9 @@ io_poll:
 	.align	2
 .L20:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L19+8)
-	.word	-2138243048
-	.word	-2138243072
 	.word	oterm(GOT)
+	.word	TERM_FLAG(GOT)
+	.word	TERM_DATA(GOT)
 	.size	io_poll, .-io_poll
 	.align	2
 	.global	putc
@@ -490,6 +513,46 @@ printf:
 	sub	sp, fp, #12
 	ldmfd	sp, {fp, sp, pc}
 	.size	printf, .-printf
+	.align	2
+	.global	getc
+	.type	getc, %function
+getc:
+	@ args = 0, pretend = 0, frame = 4
+	@ frame_needed = 1, uses_anonymous_args = 0
+	mov	ip, sp
+	stmfd	sp!, {sl, fp, ip, lr, pc}
+	sub	fp, ip, #4
+	sub	sp, sp, #4
+	ldr	sl, .L74
+.L73:
+	add	sl, pc, sl
+	str	r0, [fp, #-20]
+.L70:
+	ldr	r3, .L74+4
+	ldr	r3, [sl, r3]
+	ldr	r3, [r3, #0]
+	ldr	r3, [r3, #0]
+	mov	r3, r3, lsr #6
+	and	r3, r3, #1
+	cmp	r3, #0
+	beq	.L70
+	ldr	r3, .L74+8
+	ldr	r3, [sl, r3]
+	ldr	r3, [r3, #0]
+	ldr	r3, [r3, #0]
+	and	r3, r3, #255
+	ldr	r2, [fp, #-20]
+	strb	r3, [r2, #0]
+	mov	r3, #0
+	mov	r0, r3
+	ldmfd	sp, {r3, sl, fp, sp, pc}
+.L75:
+	.align	2
+.L74:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L73+8)
+	.word	TERM_FLAG(GOT)
+	.word	TERM_DATA(GOT)
+	.size	getc, .-getc
 	.bss
 	.align	2
 oterm:
@@ -497,4 +560,16 @@ oterm:
 	.align	2
 iterm:
 	.space	112
+	.align	2
+TERM_FLAG:
+	.space	4
+	.align	2
+TERM_DATA:
+	.space	4
+	.align	2
+TRAIN_FLAG:
+	.space	4
+	.align	2
+TRAIN_DATA:
+	.space	4
 	.ident	"GCC: (GNU) 4.0.2"
