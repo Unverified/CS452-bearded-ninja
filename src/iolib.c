@@ -14,6 +14,9 @@ int io_init() {
     iobuf_init( &iterm );
     iobuf_init( &oterm );
 
+    bwsetspeed( COM1, 2400 ); 
+
+
     if ( bwsetfifo( COM1, OFF ) || bwsetfifo( COM2, OFF ) ){
         return -1;
     }
