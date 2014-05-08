@@ -135,8 +135,10 @@ void printf( char *fmt, ... ) {
 }
 
 int getc( char *output ) {
-	while ( !( *TERM_FLAG & RXFF_MASK ) ) ;
-	*output = *TERM_DATA;
+	if ( !( *TERM_FLAG & RXFF_MASK ) ) {
+        return 1;
+    }
 
+	*output = *TERM_DATA;
 	return 0;
 }

@@ -517,26 +517,29 @@ printf:
 	.global	getc
 	.type	getc, %function
 getc:
-	@ args = 0, pretend = 0, frame = 4
+	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
-	sub	sp, sp, #4
-	ldr	sl, .L74
-.L73:
+	sub	sp, sp, #8
+	ldr	sl, .L75
+.L74:
 	add	sl, pc, sl
 	str	r0, [fp, #-20]
-.L70:
-	ldr	r3, .L74+4
+	ldr	r3, .L75+4
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	ldr	r3, [r3, #0]
 	mov	r3, r3, lsr #6
 	and	r3, r3, #1
 	cmp	r3, #0
-	beq	.L70
-	ldr	r3, .L74+8
+	bne	.L70
+	mov	r3, #1
+	str	r3, [fp, #-24]
+	b	.L72
+.L70:
+	ldr	r3, .L75+8
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
 	ldr	r3, [r3, #0]
@@ -544,12 +547,16 @@ getc:
 	ldr	r2, [fp, #-20]
 	strb	r3, [r2, #0]
 	mov	r3, #0
+	str	r3, [fp, #-24]
+.L72:
+	ldr	r3, [fp, #-24]
 	mov	r0, r3
-	ldmfd	sp, {r3, sl, fp, sp, pc}
-.L75:
+	sub	sp, fp, #16
+	ldmfd	sp, {sl, fp, sp, pc}
+.L76:
 	.align	2
-.L74:
-	.word	_GLOBAL_OFFSET_TABLE_-(.L73+8)
+.L75:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L74+8)
 	.word	TERM_FLAG(GOT)
 	.word	TERM_DATA(GOT)
 	.size	getc, .-getc
