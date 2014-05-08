@@ -28,8 +28,14 @@ int main( int argc, char* argv[] ) {
 
             if( secs == 5 ) {
                 train_setspeed( 50, 10 );
-            } else if ( secs == 50 ) {
+            } else if ( secs == 15 ) {
                 train_setspeed( 50, 16 );
+            } else if ( secs == 30 ) {
+                train_setspeed( 50, 15 );
+            } else if ( secs == 40 ) {
+                train_setspeed( 50, 15+16 );
+            } else if ( secs == 50 ) {
+                train_setspeed( 50, 0 );
             }
             
             putc( 0x1b );
