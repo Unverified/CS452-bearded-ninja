@@ -5,6 +5,7 @@ enum SWITCH_STATE {
 };
 
 int train_start();
+
 int train_setspeed( int train, int speed );
-int train_setgate( int gate, enum SWITCH_STATE state );
+int train_setgate( int gate, int state );
 

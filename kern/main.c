@@ -4,38 +4,14 @@
 #include <ts7200.h>
 #include <clock.h>
 
+#include <parse.h>
 #include <train.h>
 
-#define TRAIN 47
 #define COMMAND_SIZE 75
 
-void train_dance( int secs ) {
-    switch ( secs ) {
-    case 5:
-        train_setspeed( TRAIN, 5 );
-        break;
-    case 10:
-        train_setspeed( TRAIN, 10 );
-        break;
-    case 20:
-        train_setspeed( TRAIN, 16 );
-        break;
-    case 30:
-        train_setspeed( TRAIN, 14+16 );
-        break;
-    case 40:
-        train_setspeed( TRAIN, 14 );
-        break;
-    case 50:
-        train_setspeed( TRAIN, 5 );
-        break;
-    case 55:
-        train_setspeed( TRAIN, 15 );
-        break;
-    default:
-        break;
-    }
-}
+int running = 0;
+int print_label = 0;
+int arg[5] = {0};
 
 void bwcls() {
     bwprintf( COM2, "%c[2J", 0x1b );
@@ -68,25 +44,52 @@ int init() {
     
     int result = io_init();
     if( result ) return 1;
-    bwprintf( COM2, "io setup success!!!!\n\r" );
+    bwprintf( COM2, "io setup success!!!!\n" );
     
     result = clock_init();
     if( result ) return 2;
-    bwprintf( COM2, "clock setup success!!!!\n\r" );
+    bwprintf( COM2, "clock setup success!!!!\n" );
 
-//    train_start();
+    train_start();
+
+    running = 1;
+    print_label = 1;
+    return 0;
+}
+
+int run_command( char command[] ) {
+    switch( parse_command( command, arg ) ) {
+    case NONE:
+        break;
+    case SPEED:
+        return train_setspeed( arg[0], arg[1] );
+    case GATE:
+        return train_setgate( arg[0], arg[1] );
+    case REVERSE:
+        printf( "REVERSE %d\n", arg[0] );
+        break;
+    case QUIT:
+        running = 0;
+        print_label = 0;
+        printf( "SHUTTING DOWN\n" );
+        break;
+    default:
+        printf( "UNKNOWN COMMAND\n" );
+        break;
+    }
 
     return 0;
 }
 
 int main( int argc, char* argv[] ) {
     unsigned int i;
-    unsigned int tenths = 0;
     unsigned int secs = 0;
     unsigned int mins = 0;
+    unsigned int tenths = 0;
 
-    char inputloc = 0;
+    unsigned int inputloc = 0;
     char command[COMMAND_SIZE+1];
+
     for( i = 0 ; i < COMMAND_SIZE+1; i++ ) {
         command[i] = '\0';
     }
@@ -97,25 +100,7 @@ int main( int argc, char* argv[] ) {
     }
     bwcls();
 
-    for(;;) {
-        result = io_poll();
-        if( result ) {
-            char c;
-            if( !getc( &c ) ) {
-                command[inputloc++] = c;
-                putc( c );
-
-                if( c == '\r' ) {
-                    command[inputloc] = '\0';
-                    printf( command );
-                    printf( "\nTerm> " );
-                    inputloc = 0;
-                }
-
-                if( inputloc == COMMAND_SIZE ) inputloc--;
-            }
-        }
-
+    while( running ) {
         result = clock_poll();
         if( result > 0 ) {
             clock_get( &mins, &secs, &tenths );
@@ -125,11 +110,39 @@ int main( int argc, char* argv[] ) {
             printf( "%d %d %d\n\r", mins, secs, tenths );
             loadcur();
         }
-        if( result > 1 ) {
-             //train_dance( secs );
+
+        result = io_poll();
+        if( result ) {
+            char c;
+            if( !getc( &c ) && c != 0x1B ) {
+                putc( c );
+                command[inputloc++] = c;
+
+                switch( c ) {
+                case '\b':   
+                    putc( ' ' );
+                  if( inputloc == 0 ) break;
+                    putc( '\b' );
+                    inputloc -= 2;
+                  break;
+                case '\r':
+                    print_label = 1;
+                    command[inputloc] = '\0';
+                    run_command( command );
+                    inputloc = 0;
+                  break;
+                }
+            }
+            if( inputloc == COMMAND_SIZE ) {
+                inputloc--;
+                putc( '\b' ); 
+            }
+        }
+        if( print_label ) {
+            printf( "TERM> " );
+            print_label = 0;
         }
     }
-
 	return 0;
 }
 

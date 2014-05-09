@@ -9,8 +9,30 @@ int abs( int val ) {
     return val < 0 ? -val : val;
 }
 
+int isspace( int c ) {
+    switch( c ) {
+    case ' ':
+    case '\t':
+    case '\n':
+    case '\v':
+    case '\f':
+    case '\r':
+        return 1;
+    default:
+        return 0;
+    }
+}
+
+int isnum( char c ) {
+    return c >= '0' && c <= '9';
+}
+
+int ishex( char c ) {
+    return isnum( c ) || ( c >= 'a' && c <= 'f' ) || ( c >= 'A' && c <= 'F' );
+}
+
 int bwa2d( char ch ) {
-	if( ch >= '0' && ch <= '9' ) return ch - '0';
+	if( isnum( ch ) ) return ch - '0';
 	if( ch >= 'a' && ch <= 'f' ) return ch - 'a' + 10;
 	if( ch >= 'A' && ch <= 'F' ) return ch - 'A' + 10;
 	return -1;
