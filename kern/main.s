@@ -372,23 +372,26 @@ init:
 	.section	.rodata
 	.align	2
 .LC9:
+	.ascii	"\012Term> \000"
+	.align	2
+.LC10:
 	.ascii	"%d %d %d\012\015\000"
 	.text
 	.align	2
 	.global	main
 	.type	main, %function
 main:
-	@ args = 0, pretend = 0, frame = 120
+	@ args = 0, pretend = 0, frame = 116
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
-	sub	sp, sp, #120
-	ldr	sl, .L67
-.L66:
+	sub	sp, sp, #116
+	ldr	sl, .L70
+.L69:
 	add	sl, pc, sl
-	str	r0, [fp, #-128]
-	str	r1, [fp, #-132]
+	str	r0, [fp, #-124]
+	str	r1, [fp, #-128]
 	mov	r3, #0
 	str	r3, [fp, #-32]
 	mov	r3, #0
@@ -402,11 +405,18 @@ main:
 	b	.L53
 .L54:
 	ldr	r3, [fp, #-28]
+	mvn	r2, #99
+	sub	r0, fp, #16
+	add	r3, r0, r3
+	add	r2, r3, r2
+	mov	r3, #0
+	strb	r3, [r2, #0]
+	ldr	r3, [fp, #-28]
 	add	r3, r3, #1
 	str	r3, [fp, #-28]
 .L53:
 	ldr	r3, [fp, #-28]
-	cmp	r3, #79
+	cmp	r3, #75
 	bls	.L54
 	bl	init(PLT)
 	mov	r3, r0
@@ -415,28 +425,65 @@ main:
 	cmp	r3, #0
 	beq	.L56
 	ldr	r3, [fp, #-20]
-	str	r3, [fp, #-136]
+	str	r3, [fp, #-132]
 	b	.L52
 .L56:
 	bl	bwcls(PLT)
-	b	.L65
+	b	.L68
 .L58:
-.L65:
+.L68:
 	bl	io_poll(PLT)
 	mov	r3, r0
 	str	r3, [fp, #-20]
 	ldr	r3, [fp, #-20]
 	cmp	r3, #0
 	beq	.L59
-	sub	r3, fp, #121
+	sub	r3, fp, #117
 	mov	r0, r3
 	bl	getc(PLT)
 	mov	r3, r0
 	cmp	r3, #0
 	bne	.L59
-	ldrb	r3, [fp, #-121]	@ zero_extendqisi2
+	ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+	ldrb	r1, [fp, #-117]	@ zero_extendqisi2
+	mvn	r2, #99
+	sub	r0, fp, #16
+	add	r3, r0, r3
+	add	r2, r3, r2
+	mov	r3, r1
+	strb	r3, [r2, #0]
+	ldrb	r3, [fp, #-21]
+	add	r3, r3, #1
+	strb	r3, [fp, #-21]
+	ldrb	r3, [fp, #-117]	@ zero_extendqisi2
 	mov	r0, r3
 	bl	putc(PLT)
+	ldrb	r3, [fp, #-117]	@ zero_extendqisi2
+	cmp	r3, #13
+	bne	.L62
+	ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+	mvn	r2, #99
+	sub	r1, fp, #16
+	add	r3, r1, r3
+	add	r2, r3, r2
+	mov	r3, #0
+	strb	r3, [r2, #0]
+	sub	r3, fp, #116
+	mov	r0, r3
+	bl	printf(PLT)
+	ldr	r3, .L70+4
+	add	r3, sl, r3
+	mov	r0, r3
+	bl	printf(PLT)
+	mov	r3, #0
+	strb	r3, [fp, #-21]
+.L62:
+	ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+	cmp	r3, #75
+	bne	.L59
+	ldrb	r3, [fp, #-21]
+	sub	r3, r3, #1
+	strb	r3, [fp, #-21]
 .L59:
 	bl	clock_poll(PLT)
 	mov	r3, r0
@@ -458,7 +505,7 @@ main:
 	ldr	r2, [fp, #-40]
 	ldr	ip, [fp, #-36]
 	ldr	lr, [fp, #-32]
-	ldr	r3, .L67+4
+	ldr	r3, .L70+8
 	add	r3, sl, r3
 	mov	r0, r3
 	mov	r1, r2
@@ -468,13 +515,14 @@ main:
 	bl	loadcur(PLT)
 	b	.L58
 .L52:
-	ldr	r0, [fp, #-136]
+	ldr	r0, [fp, #-132]
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
-.L68:
+.L71:
 	.align	2
-.L67:
-	.word	_GLOBAL_OFFSET_TABLE_-(.L66+8)
+.L70:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L69+8)
 	.word	.LC9(GOTOFF)
+	.word	.LC10(GOTOFF)
 	.size	main, .-main
 	.ident	"GCC: (GNU) 4.0.2"

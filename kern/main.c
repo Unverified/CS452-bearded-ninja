@@ -7,7 +7,7 @@
 #include <train.h>
 
 #define TRAIN 47
-#define COMMAND_SIZE 80
+#define COMMAND_SIZE 75
 
 void train_dance( int secs ) {
     switch ( secs ) {
@@ -86,8 +86,9 @@ int main( int argc, char* argv[] ) {
     unsigned int mins = 0;
 
     char inputloc = 0;
-    char command[COMMAND_SIZE];
-    for( i = 0 ; i < COMMAND_SIZE; i++) {
+    char command[COMMAND_SIZE+1];
+    for( i = 0 ; i < COMMAND_SIZE+1; i++ ) {
+        command[i] = '\0';
     }
 
     int result = init();
@@ -101,7 +102,17 @@ int main( int argc, char* argv[] ) {
         if( result ) {
             char c;
             if( !getc( &c ) ) {
+                command[inputloc++] = c;
                 putc( c );
+
+                if( c == '\r' ) {
+                    command[inputloc] = '\0';
+                    printf( command );
+                    printf( "\nTerm> " );
+                    inputloc = 0;
+                }
+
+                if( inputloc == COMMAND_SIZE ) inputloc--;
             }
         }
 
