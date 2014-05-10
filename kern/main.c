@@ -49,9 +49,14 @@ int init() {
     result = term_init();
     if( result ) return 3;
     
+    switch_index = 0;
+    bwputc( COM1, 133 );
+    do {
+        switches[switch_index] = bwgetc( COM1 );
+    } while( !inc_switchread() );
+
     running = 1;
     print_label = 1;
-    switch_index = 0;
 
     return 0;
 }
@@ -100,6 +105,7 @@ unsigned int getSwitchName( int bank, int off ) {
 
 int main( int argc, char* argv[] ) {
     unsigned int i;
+
     unsigned int secs = 0;
     unsigned int mins = 0;
     unsigned int tenths = 0;
@@ -116,10 +122,10 @@ int main( int argc, char* argv[] ) {
         return result;
     }
 
+    char c;
     while( running ) {
         result = io_poll();
         if( result >> 2 ) {
-            char c;
             if( !getc( &c ) && c != 0x1B ) {
                 putc( c );
                 command[inputloc++] = c;
@@ -145,18 +151,26 @@ int main( int argc, char* argv[] ) {
             }
         }
         if( result & 3 ) {
-            char c; 
             if( !gettrain( &c ) ) {
                 savecur();
                 if( switches[switch_index] != c ) {
                     int mask = 1;
                     setpos( 7, 4 );
+
+                    /*
                     for( i = 8; i > 0; i--) {
                         if( (c & mask) > (switches[switch_index] & mask) ) {
-                            unsigned int swit = getSwitchName( switch_index, i ); 
                             printf( "%c%d ", swit, swit >> 8 );
                         }
                         mask = mask << 1;
+                    }
+                    */
+                    i = 1;
+                    for( mask = 0x80; mask > 0; mask = mask >> 1 ){
+                        if( (c & mask) > (switches[switch_index] & mask) ) {
+                            printf( "%c %d ", 'A'+(switch_index/2) , i+8*(switch_index%2)   );
+                        }
+                        i ++;
                     }
                     switches[switch_index] = c;
                 }
@@ -179,10 +193,10 @@ int main( int argc, char* argv[] ) {
             setpos( 0, 0 );
             printf( "%d %d %d\n\r", mins, secs, tenths );
             loadcur();
-
             train_askdump();
         }
         
+
         if( print_label ) {
             printf( "TERM> " );
             print_label = 0;
