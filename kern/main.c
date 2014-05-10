@@ -43,10 +43,7 @@ int init() {
     bwprintf( COM2, "clock setup success!!!!\n" );
 
     bwprintf( COM2, "Setting up Trainset\n" );
-    result = train_start();
-
-    bwprintf( COM2, "Clearing Switch Data\n" );
-    bwputc( COM1, 192 );
+    result = train_init();
     bwprintf( COM2, "Train Setup Success!!!!\n" );
 
     result = term_init();

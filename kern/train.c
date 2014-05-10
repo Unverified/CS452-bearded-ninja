@@ -6,9 +6,10 @@
 
 #include <train.h>
 
-static enum SWITCH_STATE gate_states[22];
-static char train_state[80];
+#define NUM_TRAINS 7
 
+static enum SWITCH_STATE gate_states[22];
+static unsigned int train_state[NUM_TRAINS];
 
 static int _storegate( int store ) {
     if( store < 0 ) return -1;
@@ -24,12 +25,54 @@ static int _gatestore( int gate ) {
     return -1;
 }
 
+static int _trainstore( int train ) {
+    switch ( train ) {
+    case 43:
+        return 0;
+    case 45:
+        return 1;
+    case 47:
+        return 2;
+    case 48:
+        return 3;
+    case 49:
+        return 4;
+    case 50:
+        return 5;
+    case 51:
+        return 6;
+    default:
+        return -1;
+    }
+}
+
+static int _storetrain( int store ) {
+    switch( store ) {
+    case 0:
+        return 43;
+    case 1:
+        return 45;
+    case 2:
+        return 47;
+    case 3:
+        return 48;
+    case 4:
+        return 49;
+    case 5:
+        return 50;
+    case 6:
+        return 51;
+    default:
+        return -1;
+    }
+}
+
 static int _bwsettrain( int train, int state ) {
     bwputc( COM1, (char)state );
     bwputc( COM1, (char)train );
     bwprintf( COM2, "Setting Train %d State: %d\n", train, state );
 
-    train_state[train-1] = (char) state;
+    train_state[_trainstore( train )] = (char) state;
     return 0;
 }
 
@@ -75,7 +118,7 @@ static int _setgate( int gate, enum SWITCH_STATE state ) {
     return 0;
 }
 
-int train_start() {
+int train_init() {
     int i;
 
     bwputc( COM1, 96 );
@@ -89,14 +132,18 @@ int train_start() {
     _bwsetgate( _storegate( i++ ), STRAIT );
 
     bwprintf( COM2, "RESETTING TRAINS...\n" );
-    for( i = 0; i < 80; i++ ) {
-        _bwsettrain( i+1, 1 );
+    for( i = 0; i < NUM_TRAINS; i++ ) {
+        _bwsettrain( _storetrain( i ), 0 );
     }
+
+    bwprintf( COM2, "Clearing Switch Data... \n" );
+    bwputc( COM1, 192 );
+
     return 0;
 }
 
 int train_setspeed( int train, int speed ) {
-    if( train < 1 || train > 80 ) {
+    if( _trainstore( train ) == -1 ) {
         printf( "Invalid Train Number: %d\n", train );
         return -1;
     }

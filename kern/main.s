@@ -91,9 +91,6 @@ inc_switchread:
 	.ascii	"Setting up Trainset\012\000"
 	.align	2
 .LC4:
-	.ascii	"Clearing Switch Data\012\000"
-	.align	2
-.LC5:
 	.ascii	"Train Setup Success!!!!\012\000"
 	.text
 	.align	2
@@ -153,19 +150,11 @@ init:
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
-	bl	train_start(PLT)
+	bl	train_init(PLT)
 	mov	r3, r0
 	str	r3, [fp, #-20]
 	mov	r0, #1
 	ldr	r3, .L19+20
-	add	r3, sl, r3
-	mov	r1, r3
-	bl	bwprintf(PLT)
-	mov	r0, #0
-	mov	r1, #192
-	bl	bwputc(PLT)
-	mov	r0, #1
-	ldr	r3, .L19+24
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
@@ -179,15 +168,15 @@ init:
 	str	r3, [fp, #-24]
 	b	.L12
 .L15:
+	ldr	r3, .L19+24
+	ldr	r2, [sl, r3]
+	mov	r3, #1
+	str	r3, [r2, #0]
 	ldr	r3, .L19+28
 	ldr	r2, [sl, r3]
 	mov	r3, #1
 	str	r3, [r2, #0]
 	ldr	r3, .L19+32
-	ldr	r2, [sl, r3]
-	mov	r3, #1
-	str	r3, [r2, #0]
-	ldr	r3, .L19+36
 	ldr	r2, [sl, r3]
 	mov	r3, #0
 	str	r3, [r2, #0]
@@ -207,20 +196,19 @@ init:
 	.word	.LC2(GOTOFF)
 	.word	.LC3(GOTOFF)
 	.word	.LC4(GOTOFF)
-	.word	.LC5(GOTOFF)
 	.word	running(GOT)
 	.word	print_label(GOT)
 	.word	switch_index(GOT)
 	.size	init, .-init
 	.section	.rodata
 	.align	2
-.LC6:
+.LC5:
 	.ascii	"REVERSE %d\012\000"
 	.align	2
-.LC7:
+.LC6:
 	.ascii	"SHUTTING DOWN\012\000"
 	.align	2
-.LC8:
+.LC7:
 	.ascii	"UNKNOWN COMMAND\012\000"
 	.text
 	.align	2
@@ -323,11 +311,11 @@ run_command:
 .L33:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L32+8)
 	.word	arg(GOT)
-	.word	.LC6(GOTOFF)
+	.word	.LC5(GOTOFF)
 	.word	running(GOT)
 	.word	print_label(GOT)
+	.word	.LC6(GOTOFF)
 	.word	.LC7(GOTOFF)
-	.word	.LC8(GOTOFF)
 	.size	run_command, .-run_command
 	.align	2
 	.global	getSwitchName
@@ -413,16 +401,16 @@ getSwitchName:
 	.size	getSwitchName, .-getSwitchName
 	.section	.rodata
 	.align	2
-.LC9:
+.LC8:
 	.ascii	"%c%d \000"
 	.align	2
-.LC10:
+.LC9:
 	.ascii	"%d \000"
 	.align	2
-.LC11:
+.LC10:
 	.ascii	"%d %d %d\012\015\000"
 	.align	2
-.LC12:
+.LC11:
 	.ascii	"TERM> \000"
 	.text
 	.align	2
@@ -725,10 +713,10 @@ main:
 	.word	print_label(GOT)
 	.word	switch_index(GOT)
 	.word	switches(GOT)
+	.word	.LC8(GOTOFF)
 	.word	.LC9(GOTOFF)
 	.word	.LC10(GOTOFF)
 	.word	.LC11(GOTOFF)
-	.word	.LC12(GOTOFF)
 	.word	running(GOT)
 	.size	main, .-main
 	.ident	"GCC: (GNU) 4.0.2"

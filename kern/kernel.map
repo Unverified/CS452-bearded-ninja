@@ -27,7 +27,7 @@ data            0x0000000000218000        0x0
  *(.data)
                 0x0000000000218000                _DataEnd = .
 
-bss             0x0000000000218000      0x1f4
+bss             0x0000000000218000      0x1c0
                 0x0000000000218000                _BssStart = .
  *(.bss)
  .bss           0x0000000000218000       0x14 clock.o
@@ -37,109 +37,109 @@ bss             0x0000000000218000      0x1f4
                 0x0000000000218014                running
                 0x000000000021801c                arg
                 0x0000000000218034                switches
- .bss           0x000000000021805c       0xa8 train.o
- .bss           0x0000000000218104       0xf0 ../lib/libbufio.a(iolib.o)
-                0x00000000002181f4                _BssEnd = .
+ .bss           0x000000000021805c       0x74 train.o
+ .bss           0x00000000002180d0       0xf0 ../lib/libbufio.a(iolib.o)
+                0x00000000002181c0                _BssEnd = .
 
-text            0x00000000002181f4     0x3d34
+text            0x00000000002181c0     0x3ea0
  *(.text)
- .text          0x00000000002181f4      0x29c clock.o
-                0x00000000002181f4                clock_init
-                0x00000000002182d0                clock_get
-                0x0000000000218350                clock_poll
- .text          0x0000000000218490      0x8c8 main.o
-                0x00000000002186a4                run_command
-                0x0000000000218490                inc_switchread
-                0x0000000000218510                init
-                0x0000000000218904                main
-                0x00000000002187fc                getSwitchName
- .text          0x0000000000218d58      0x770 parse.o
-                0x0000000000219058                parse_gate
-                0x0000000000218edc                parse_argument
-                0x0000000000218d58                consume_integer
-                0x00000000002192c8                parse_reverse
-                0x0000000000219374                parse_command
-                0x0000000000219170                parse_train
-                0x0000000000218e08                consume_whitespace
-                0x0000000000219288                parse_stop
- .text          0x00000000002194c8      0x30c terminal.o
-                0x000000000021971c                term_init
-                0x0000000000219604                term_uswitchtable
-                0x00000000002194c8                term_switchtable
-                0x000000000021979c                term_destroy
- .text          0x00000000002197d4      0x6ec train.o
-                0x0000000000219cf4                train_setspeed
-                0x0000000000219ea0                train_askdump
-                0x0000000000219b7c                train_start
-                0x0000000000219dd0                train_setgate
- .text          0x0000000000219ec0      0x918 ../lib/libbufio.a(iolib.o)
-                0x000000000021a2d8                putw
-                0x000000000021a698                printf
-                0x000000000021a264                putstr
-                0x0000000000219ec0                io_init
-                0x000000000021a6c8                getc
-                0x000000000021a3d4                formatString
-                0x000000000021a184                io_poll
-                0x000000000021a218                puttrain
-                0x000000000021a094                train_writepoll
-                0x000000000021a1cc                putc
-                0x000000000021a750                gettrain
-                0x0000000000219fc0                term_writepoll
- .text          0x000000000021a7d8      0x1ec ../lib/libbufio.a(iobuffer.o)
-                0x000000000021a82c                iobuf_init
-                0x000000000021a930                iobuf_store
-                0x000000000021a8a0                iobuf_get
-                0x000000000021a870                iobuf_empty
- .text          0x000000000021a9c4      0x990 ../lib/libbwio.a(bwio.o)
-                0x000000000021ad8c                bwputr
-                0x000000000021a9c4                bwsetfifo
-                0x000000000021ab98                bwputc
-                0x000000000021aa8c                bwsetspeed
-                0x000000000021acac                c2x
-                0x000000000021af90                bwgetc
-                0x000000000021b048                bwformat
-                0x000000000021ae88                bwputw
-                0x000000000021b31c                bwprintf
-                0x000000000021ad0c                bwputx
-                0x000000000021ae0c                bwputstr
- .text          0x000000000021b354      0x6b0 ../lib/libstdlib.a(stdlib.o)
-                0x000000000021b46c                setpos
-                0x000000000021b66c                ishex
-                0x000000000021b9a0                bwi2a
-                0x000000000021b408                bwloadcur
-                0x000000000021b514                memcpy
-                0x000000000021b5a4                isspace
-                0x000000000021b6f0                bwa2d
-                0x000000000021b618                isnum
-                0x000000000021b798                bwa2i
-                0x000000000021b4e4                loadcur
-                0x000000000021b3d4                bwsavecur
-                0x000000000021b85c                bwui2a
-                0x000000000021b4b4                savecur
-                0x000000000021b354                bwcls
-                0x000000000021b388                bwsetpos
-                0x000000000021b43c                cls
-                0x000000000021b57c                abs
- .text          0x000000000021ba04      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
-                0x000000000021ba04                __udivsi3
-                0x000000000021bafc                __aeabi_uidivmod
- .text          0x000000000021bb14       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
-                0x000000000021bb14                __umodsi3
- .text          0x000000000021bbe0        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
-                0x000000000021bbe0                __aeabi_ldiv0
-                0x000000000021bbe0                __div0
-                0x000000000021bbe0                __aeabi_idiv0
+ .text          0x00000000002181c0      0x29c clock.o
+                0x00000000002181c0                clock_init
+                0x000000000021829c                clock_get
+                0x000000000021831c                clock_poll
+ .text          0x000000000021845c      0x8a4 main.o
+                0x000000000021864c                run_command
+                0x000000000021845c                inc_switchread
+                0x00000000002184dc                init
+                0x00000000002188ac                main
+                0x00000000002187a4                getSwitchName
+ .text          0x0000000000218d00      0x770 parse.o
+                0x0000000000219000                parse_gate
+                0x0000000000218e84                parse_argument
+                0x0000000000218d00                consume_integer
+                0x0000000000219270                parse_reverse
+                0x000000000021931c                parse_command
+                0x0000000000219118                parse_train
+                0x0000000000218db0                consume_whitespace
+                0x0000000000219230                parse_stop
+ .text          0x0000000000219470      0x30c terminal.o
+                0x00000000002196c4                term_init
+                0x00000000002195ac                term_uswitchtable
+                0x0000000000219470                term_switchtable
+                0x0000000000219744                term_destroy
+ .text          0x000000000021977c      0x878 train.o
+                0x0000000000219e2c                train_setspeed
+                0x0000000000219fd4                train_askdump
+                0x0000000000219c8c                train_init
+                0x0000000000219f04                train_setgate
+ .text          0x0000000000219ff4      0x918 ../lib/libbufio.a(iolib.o)
+                0x000000000021a40c                putw
+                0x000000000021a7cc                printf
+                0x000000000021a398                putstr
+                0x0000000000219ff4                io_init
+                0x000000000021a7fc                getc
+                0x000000000021a508                formatString
+                0x000000000021a2b8                io_poll
+                0x000000000021a34c                puttrain
+                0x000000000021a1c8                train_writepoll
+                0x000000000021a300                putc
+                0x000000000021a884                gettrain
+                0x000000000021a0f4                term_writepoll
+ .text          0x000000000021a90c      0x1ec ../lib/libbufio.a(iobuffer.o)
+                0x000000000021a960                iobuf_init
+                0x000000000021aa64                iobuf_store
+                0x000000000021a9d4                iobuf_get
+                0x000000000021a9a4                iobuf_empty
+ .text          0x000000000021aaf8      0x990 ../lib/libbwio.a(bwio.o)
+                0x000000000021aec0                bwputr
+                0x000000000021aaf8                bwsetfifo
+                0x000000000021accc                bwputc
+                0x000000000021abc0                bwsetspeed
+                0x000000000021ade0                c2x
+                0x000000000021b0c4                bwgetc
+                0x000000000021b17c                bwformat
+                0x000000000021afbc                bwputw
+                0x000000000021b450                bwprintf
+                0x000000000021ae40                bwputx
+                0x000000000021af40                bwputstr
+ .text          0x000000000021b488      0x6b0 ../lib/libstdlib.a(stdlib.o)
+                0x000000000021b5a0                setpos
+                0x000000000021b7a0                ishex
+                0x000000000021bad4                bwi2a
+                0x000000000021b53c                bwloadcur
+                0x000000000021b648                memcpy
+                0x000000000021b6d8                isspace
+                0x000000000021b824                bwa2d
+                0x000000000021b74c                isnum
+                0x000000000021b8cc                bwa2i
+                0x000000000021b618                loadcur
+                0x000000000021b508                bwsavecur
+                0x000000000021b990                bwui2a
+                0x000000000021b5e8                savecur
+                0x000000000021b488                bwcls
+                0x000000000021b4bc                bwsetpos
+                0x000000000021b570                cls
+                0x000000000021b6b0                abs
+ .text          0x000000000021bb38      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x000000000021bb38                __udivsi3
+                0x000000000021bc30                __aeabi_uidivmod
+ .text          0x000000000021bc48       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x000000000021bc48                __umodsi3
+ .text          0x000000000021bd14        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x000000000021bd14                __aeabi_ldiv0
+                0x000000000021bd14                __div0
+                0x000000000021bd14                __aeabi_idiv0
  *(.got)
- .got           0x000000000021bbe4       0x48 clock.o
+ .got           0x000000000021bd18       0x48 clock.o
  *(.got.plt)
- .got.plt       0x000000000021bc2c        0xc clock.o
-                0x000000000021bc2c                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x000000000021bd60        0xc clock.o
+                0x000000000021bd60                _GLOBAL_OFFSET_TABLE_
  *(.rodata)
- .rodata        0x000000000021bc38       0xfc main.o
- .rodata        0x000000000021bd34       0x1c parse.o
- .rodata        0x000000000021bd50       0xec terminal.o
- .rodata        0x000000000021be3c       0xd0 train.o
- .rodata        0x000000000021bf0c       0x1c ../lib/libstdlib.a(stdlib.o)
+ .rodata        0x000000000021bd6c       0xe4 main.o
+ .rodata        0x000000000021be50       0x1c parse.o
+ .rodata        0x000000000021be6c       0xec terminal.o
+ .rodata        0x000000000021bf58       0xec train.o
+ .rodata        0x000000000021c044       0x1c ../lib/libstdlib.a(stdlib.o)
  *(.glue_7)
  *(.glue_7t)
 
