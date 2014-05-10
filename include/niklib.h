@@ -2,6 +2,17 @@
 void memcpy( char *destaddr, char *srcaddr, int len );
 int abs( int val );
 
+void setpos( int col, int row );
+void bwsetpos( int col, int row );
+
+void cls();
+void bwcls();
+
+void savecur();
+void loadcur();
+void bwsavecur();
+void bwloadcur();
+
 int isspace( int c );
 int isnum( char c );
 int ishex( char c );

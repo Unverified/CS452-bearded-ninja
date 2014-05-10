@@ -8,7 +8,7 @@
 #include "iobuffer.h"
 
 static struct IOBuffer oterm;
-static struct IOBuffer iterm;
+static struct IOBuffer otrain;
 
 static int *TERM_FLAG;
 static int *TERM_DATA;
@@ -17,7 +17,7 @@ static int *TRAIN_FLAG;
 static int *TRAIN_DATA;
 
 int io_init() {
-    iobuf_init( &iterm );
+    iobuf_init( &otrain );
     iobuf_init( &oterm );
 
     bwsetspeed( COM1, 2400 ); 
@@ -35,22 +35,44 @@ int io_init() {
     return 0;
 }
 
-int io_poll() {
+int term_writepoll() {
     char c;
 
-    if( iobuf_empty( &oterm )  ) return 2;
-    if( ( *TERM_FLAG & TXFF_MASK ) ) return 1;
-
-    if( iobuf_get( &oterm, &c ) ) {
-        return -1;
-    }
+    if( iobuf_empty( &oterm )  ) return 1;
+    if( (*TERM_FLAG & (TXFF_MASK | TXBUSY_MASK)) ) return 2;
+    if( iobuf_get( &oterm, &c ) ) return 3;
     *TERM_DATA = c;
 
 	return 0;
 }
 
+int train_writepoll() {
+    char c;
+
+    if( iobuf_empty( &otrain ) ) return 1;
+    if( (*TRAIN_FLAG & (TXFF_MASK | TXBUSY_MASK)) || !(*TRAIN_FLAG & CTS_MASK) ) return 2;
+    if( iobuf_get( &otrain, &c ) ) {
+        return 3;
+    }
+    *TRAIN_DATA = c;
+    
+    return 0;
+}
+
+int io_poll() {
+    int result = term_writepoll();
+    result = result << 2;
+    result |= train_writepoll();
+
+    return result;
+}
+
 int putc( const char c ) {
     return iobuf_store( &oterm, c );
+}
+
+int puttrain( const char c ) {
+    return iobuf_store( &otrain, c );
 }
 
 int putstr( char *str ) {
@@ -138,7 +160,14 @@ int getc( char *output ) {
 	if ( !( *TERM_FLAG & RXFF_MASK ) ) {
         return 1;
     }
-
 	*output = *TERM_DATA;
+	return 0;
+}
+
+int gettrain( char *output ) {
+	if ( !( *TRAIN_FLAG & RXFF_MASK ) ) {
+        return 1;
+    }
+	*output = *TRAIN_DATA;
 	return 0;
 }

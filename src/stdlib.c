@@ -1,5 +1,39 @@
 
 #include <niklib.h>
+#include <bwio.h>
+#include <iolib.h>
+
+void bwcls() {
+    bwprintf( COM2, "\x1B[2J" );
+}
+
+void bwsetpos( int col, int row ) {
+    bwprintf( COM2, "\x1B[%d;%dH", col, row );
+}
+
+void bwsavecur() {
+   bwprintf( COM2, "\x1B[s" );
+}
+
+void bwloadcur() {
+   bwprintf( COM2, "\x1B[u" );
+}
+
+void cls() {
+    printf( "\x1B[2J" );
+}
+
+void setpos( int col, int row ) {
+    printf( "\x1B[%d;%dH", col, row );
+}
+
+void savecur() {
+    printf( "\x1B[s" );
+}
+
+void loadcur() {
+    printf( "\x1B[u" );
+}
 
 void memcpy( char *destaddr, char *srcaddr, int len ) {
     while ( len-- ) *destaddr++ = *srcaddr++;

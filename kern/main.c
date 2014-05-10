@@ -3,62 +3,64 @@
 #include <iolib.h>
 #include <ts7200.h>
 #include <clock.h>
+#include <niklib.h>
+#include <terminal.h>
 
 #include <parse.h>
 #include <train.h>
 
 #define COMMAND_SIZE 75
+#define ARGUMENT_CACHE_SIZE 5
 
-int running = 0;
-int print_label = 0;
-int arg[5] = {0};
+unsigned int running = 0;
+unsigned int print_label = 0;
 
-void bwcls() {
-    bwprintf( COM2, "%c[2J", 0x1b );
+unsigned int arg[ARGUMENT_CACHE_SIZE] = {0};
+unsigned int switch_index = 0;
+unsigned int switches[10] = {0};
+
+int inc_switchread() {
+    if ( switch_index == 9 ){
+        switch_index = 0;
+        return -1;
+    }
+    switch_index++;
+    return 0;
 }
 
-void bwsetpos( int col, int row ) {
-    bwprintf( COM2, "%c[%d;%dH", 0x1b, col, row );
-}
-
-void cls() {
-    printf( "\x1b[2J" );
-}
-
-void setpos( int col, int row ) {
-    printf( "\x1b[%d;%dH", col, row );
-}
-
-void savecur() {
-    printf( "\x1b[s" );
-}
-
-void loadcur() {
-    printf( "\x1B[u" );
-}
 
 int init() {
-    bwcls();
-    bwsetpos( 0, 0 );
-    bwprintf( COM2, "Booting up NIK os\n\r" ); 
-    
     int result = io_init();
     if( result ) return 1;
-    bwprintf( COM2, "io setup success!!!!\n" );
-    
+
+    bwcls();
+    bwsetpos( 0, 0 );
+    bwprintf( COM2, "Booting up NIK OS (R) V0.0.123b alpha beta\n\r" ); 
+
+    bwprintf( COM2, "Setting up Clock\n" );
     result = clock_init();
     if( result ) return 2;
     bwprintf( COM2, "clock setup success!!!!\n" );
 
-    train_start();
+    bwprintf( COM2, "Setting up Trainset\n" );
+    result = train_start();
 
+    bwprintf( COM2, "Clearing Switch Data\n" );
+    bwputc( COM1, 192 );
+    bwprintf( COM2, "Train Setup Success!!!!\n" );
+
+    result = term_init();
+    if( result ) return 3;
+    
     running = 1;
     print_label = 1;
+    switch_index = 0;
+
     return 0;
 }
 
 int run_command( char command[] ) {
-    switch( parse_command( command, arg ) ) {
+    switch( parse_command( command, (int*)arg ) ) {
     case NONE:
         break;
     case SPEED:
@@ -81,6 +83,24 @@ int run_command( char command[] ) {
     return 0;
 }
 
+unsigned int getSwitchName( int bank, int off ) {
+    unsigned int result;
+
+    if ( bank % 2 ) result = off+8;
+    else result = off;
+
+    result = result << 8;
+    if( bank < 0 )  return 0;
+    else if( bank < 2 )  result |= 'A';
+    else if( bank < 4 )  result |= 'B';
+    else if( bank < 6 )  result |= 'C';
+    else if( bank < 8 )  result |= 'D';
+    else if( bank < 10 ) result |= 'E';
+
+    return result;
+}
+
+
 int main( int argc, char* argv[] ) {
     unsigned int i;
     unsigned int secs = 0;
@@ -98,28 +118,17 @@ int main( int argc, char* argv[] ) {
     if( result ) {
         return result;
     }
-    bwcls();
 
     while( running ) {
-        result = clock_poll();
-        if( result > 0 ) {
-            clock_get( &mins, &secs, &tenths );
-
-            savecur();
-            setpos( 0, 0 );
-            printf( "%d %d %d\n\r", mins, secs, tenths );
-            loadcur();
-        }
-
         result = io_poll();
-        if( result ) {
+        if( result >> 2 ) {
             char c;
             if( !getc( &c ) && c != 0x1B ) {
                 putc( c );
                 command[inputloc++] = c;
 
                 switch( c ) {
-                case '\b':   
+                case '\b': 
                     putc( ' ' );
                   if( inputloc == 0 ) break;
                     putc( '\b' );
@@ -138,11 +147,52 @@ int main( int argc, char* argv[] ) {
                 putc( '\b' ); 
             }
         }
+        if( result & 3 ) {
+            char c; 
+            if( !gettrain( &c ) ) {
+                savecur();
+                if( switches[switch_index] != c ) {
+                    int mask = 1;
+                    setpos( 7, 4 );
+                    for( i = 8; i > 0; i--) {
+                        if( (c & mask) > (switches[switch_index] & mask) ) {
+                            unsigned int swit = getSwitchName( switch_index, i ); 
+                            printf( "%c%d ", swit, swit >> 8 );
+                        }
+                        mask = mask << 1;
+                    }
+                    switches[switch_index] = c;
+                }
+
+                if( inc_switchread() ) {
+                    setpos( 8, 4 );
+                    do {
+                        printf( "%d ", switches[switch_index] );
+                    } while( !inc_switchread() );
+                }
+                loadcur();
+            }
+        }
+            
+        result = clock_poll();
+        if( result > 0 ) {
+            clock_get( &mins, &secs, &tenths );
+
+            savecur();
+            setpos( 0, 0 );
+            printf( "%d %d %d\n\r", mins, secs, tenths );
+            loadcur();
+
+            train_askdump();
+        }
+        
         if( print_label ) {
             printf( "TERM> " );
             print_label = 0;
         }
     }
+
+    term_destroy();
 	return 0;
 }
 

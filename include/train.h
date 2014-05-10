@@ -4,8 +4,9 @@ enum SWITCH_STATE {
     STRAIT = 'S'
 };
 
-int train_start();
+int train_start( void );
 
 int train_setspeed( int train, int speed );
 int train_setgate( int gate, int state );
+int train_askdump( void );
 
