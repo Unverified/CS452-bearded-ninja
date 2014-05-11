@@ -645,11 +645,15 @@ main:
 	str	r3, [fp, #-24]
 	ldr	r3, [fp, #-24]
 	cmp	r3, #0
-	beq	.L112
+	beq	.L76
 	ldr	r1, [fp, #-24]
 	str	r1, [fp, #-148]
 	b	.L78
+.L76:
+	bl	debug_init(PLT)
+	b	.L112
 .L80:
+	bl	debug_loop(PLT)
 	bl	io_poll(PLT)
 	mov	r3, r0
 	str	r3, [fp, #-24]
@@ -879,6 +883,7 @@ main:
 	mov	r2, ip
 	mov	r3, lr
 	bl	printf(PLT)
+	bl	debug_print(PLT)
 	bl	loadcur(PLT)
 	bl	train_poll(PLT)
 	mov	r3, r0

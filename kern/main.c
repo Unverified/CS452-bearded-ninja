@@ -5,6 +5,7 @@
 #include <clock.h>
 #include <niklib.h>
 #include <terminal.h>
+#include <debug.h>
 
 #include <parse.h>
 #include <train.h>
@@ -13,10 +14,6 @@
 #define ARGUMENT_CACHE_SIZE 5
 #define SWITCH_BUFFER_SIZE 14
 
-struct SwitchName {
-    char bank;
-    unsigned int num;
-};
 
 unsigned int running = 0;
 unsigned int print_label = 0;
@@ -168,8 +165,10 @@ int main( int argc, char* argv[] ) {
     unsigned int worst_try = 0;
     unsigned int last_try = clock_t4tick();
     */
-
+    debug_init();
     while( running ) {
+        debug_loop();
+
         /*
         unsigned int try = clock_t4tick();
         if( (try-last_try) > worst_try ) worst_try = try - last_try;
@@ -253,6 +252,7 @@ int main( int argc, char* argv[] ) {
             setpos( 8, 70 );
             printf( "%d", last_try );
             */
+            debug_print();
             loadcur();
 
             result = train_poll();
