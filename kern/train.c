@@ -8,8 +8,10 @@
 
 #define NUM_TRAINS 7
 
+extern unsigned int clock_ticks;
+
 static enum SWITCH_STATE gate_states[22];
-static unsigned int train_state[NUM_TRAINS];
+static struct Train_State train_state[NUM_TRAINS];
 
 static int _storegate( int store ) {
     if( store < 0 ) return -1;
@@ -70,9 +72,11 @@ static int _storetrain( int store ) {
 static int _bwsettrain( int train, int state ) {
     bwputc( COM1, (char)state );
     bwputc( COM1, (char)train );
-    bwprintf( COM2, "Setting Train %d State: %d\n", train, state );
 
-    train_state[_trainstore( train )] = (char) state;
+    int store = _trainstore( train );
+    bwprintf( COM2, "Setting Train %d State: %d\n", train, state );
+    train_state[store].reversing = 0;
+    train_state[store].cstate = (char) state;
     return 0;
 }
 
@@ -88,7 +92,6 @@ static int _bwsetgate( int gate, enum SWITCH_STATE state ) {
     bwputc( COM1, gate );
     bwputc( COM1, 32 );
     bwprintf( COM2, "Setting Gate %d: %c\n", gate, state );
-
     gate_states[_gatestore( gate )] = state;
     return 0;
 }
@@ -96,7 +99,6 @@ static int _bwsetgate( int gate, enum SWITCH_STATE state ) {
 static int _settrain( int train, int state ) {
     puttrain( (char)state );
     puttrain( (char)train );
-    train_state[train-1] = (char) state;
     return 0;
 }
 
@@ -143,7 +145,8 @@ int train_init() {
 }
 
 int train_setspeed( int train, int speed ) {
-    if( _trainstore( train ) == -1 ) {
+    int store = _trainstore( train );
+    if( store == -1 ) {
         printf( "Invalid Train Number: %d\n", train );
         return -1;
     }
@@ -151,7 +154,14 @@ int train_setspeed( int train, int speed ) {
         printf( "Invalid Speed For Train: %d\n", speed );
         return -1;
     }
+
+    struct Train_State *state = &train_state[store];
+    state->cstate = ((~TSPEED_MASK) & state->cstate) | speed;
     printf( "Setting Train %d Speed: %d\n", train, speed );
+    if( state->reversing ) {
+        return 1;
+    }
+
     return _settrain( train, speed );
 }
 
@@ -173,7 +183,44 @@ int train_setgate( int gate, int state ) {
     return _setgate( gate, state );
 }
 
+int train_reverse( int train ) {
+    int store = _trainstore( train );
+    if( store == -1 ) {
+        printf( "Invalid Train Number: %d\n", train );
+    }
+
+    struct Train_State *state = &train_state[store];
+    if( state->reversing ) {
+        state->reversing = 0;
+        return _settrain( train, state->cstate );
+    }
+    
+    state->reversing = 1;
+    state->waittill = clock_ticks + 40;
+
+    puttrain( 0 );
+    puttrain( train );
+
+    return 0;
+}
+
+int train_poll() {
+    int i;
+
+    for( i = 0; i < NUM_TRAINS; i++ ) {
+        int train = _storetrain( i );
+        if( train_state[i].reversing == 1 && train_state[i].waittill < clock_ticks ) {
+            _settrain( train, 15 );
+            _settrain( train, train_state[i].cstate );
+            train_state[i].reversing = 0;
+        }
+    }
+    return 0;
+}
+
+
 int train_askdump() {
     return puttrain( 133 );
 }
+
 
