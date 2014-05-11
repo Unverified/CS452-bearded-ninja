@@ -739,10 +739,10 @@ gettrain:
 	.bss
 	.align	2
 oterm:
-	.space	112
+	.space	524
 	.align	2
 otrain:
-	.space	112
+	.space	524
 	.align	2
 TERM_FLAG:
 	.space	4

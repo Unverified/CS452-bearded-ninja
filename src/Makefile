@@ -15,6 +15,8 @@ CFLAGS  = -c -fPIC -ffreestanding -Wall -I. -I../include -mcpu=arm920t -msoft-fl
 ASFLAGS	= -mcpu=arm920t -mapcs-32
 # -mapcs-32: always create a complete stack frame
 
+LIBPRE = ../lib/lib
+
 ARFLAGS = rcs
 LIBDIR= ../libs
 
@@ -34,16 +36,14 @@ all: $(STDLIB) $(BWIO) $(BUFIO)
 	$(AS) $(ASFLAGS) -o $@ $(@:.o=.s)
 
 $(BWIO): $(BWIO_DEP)
-	$(AR) $(ARFLAGS) lib$@ $^
+	$(AR) $(ARFLAGS) $(LIBPRE)$@ $^
 
 $(BUFIO): $(BUFIO_DEP)
-	$(AR) $(ARFLAGS) lib$@ $^
+	$(AR) $(ARFLAGS) $(LIBPRE)$@ $^
 
 $(STDLIB): $(STDLIB_DEP)
-	$(AR) $(ARFLAGS) lib$@ $^
-
-install:
-	cp lib$(BWIO) lib$(BUFIO) lib$(STDLIB) ../lib
+	$(AR) $(ARFLAGS) $(LIBPRE)$@ $^
 
 clean:
 	$(RM) -f *.s *.a *.o
+

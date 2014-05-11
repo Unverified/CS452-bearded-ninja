@@ -1,0 +1,199 @@
+Archive member included because of file (symbol)
+
+../lib/libbufio.a(iolib.o)    main.o (io_init)
+../lib/libbufio.a(iobuffer.o)
+                              ../lib/libbufio.a(iolib.o) (iobuf_init)
+../lib/libbwio.a(bwio.o)      ../lib/libbufio.a(iolib.o) (bwsetfifo)
+../lib/libstdlib.a(stdlib.o)  main.o (bwcls)
+/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                              ../lib/libstdlib.a(stdlib.o) (__udivsi3)
+/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                              ../lib/libstdlib.a(stdlib.o) (__umodsi3)
+/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                              /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o) (__div0)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000000218000 0x0000000002000000
+rom              0x0000000060000000 0x0000000000800000
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+data            0x0000000000218000        0x0
+                0x0000000000218000                _DataStart = .
+ *(.data)
+                0x0000000000218000                _DataEnd = .
+
+bss             0x0000000000218000      0x5ac
+                0x0000000000218000                _BssStart = .
+ *(.bss)
+ .bss           0x0000000000218000       0x1c clock.o
+                0x000000000021800c                clock_ticks
+ .bss           0x000000000021801c       0xbc main.o
+                0x0000000000218020                print_label
+                0x0000000000218038                switch_index
+                0x000000000021801c                running
+                0x0000000000218024                arg
+                0x000000000021803c                switches
+                0x0000000000218064                switch_head
+ .bss           0x00000000002180d8       0xac train.o
+ .bss           0x0000000000218184      0x428 ../lib/libbufio.a(iolib.o)
+                0x00000000002185ac                _BssEnd = .
+
+text            0x00000000002185ac     0x4640
+ *(.text)
+ .text          0x00000000002185ac      0x364 clock.o
+                0x000000000021877c                clock_t4tick
+                0x00000000002185ac                clock_init
+                0x0000000000218720                clock_t4enable
+                0x00000000002186a0                clock_get
+                0x00000000002187b0                clock_poll
+ .text          0x0000000000218910      0xb48 main.o
+                0x0000000000218c60                run_command
+                0x0000000000218910                inc_switchread
+                0x0000000000218e60                printSwitchName
+                0x0000000000218990                inc_switchstore
+                0x0000000000218ef0                printTrippedSwitchs
+                0x0000000000218a4c                init
+                0x0000000000218f90                main
+                0x0000000000218db0                getSwitchName
+ .text          0x0000000000219458      0x770 parse.o
+                0x0000000000219758                parse_gate
+                0x00000000002195dc                parse_argument
+                0x0000000000219458                consume_integer
+                0x00000000002199c8                parse_reverse
+                0x0000000000219a74                parse_command
+                0x0000000000219870                parse_train
+                0x0000000000219508                consume_whitespace
+                0x0000000000219988                parse_stop
+ .text          0x0000000000219bc8      0x3b4 terminal.o
+                0x0000000000219ec4                term_init
+                0x0000000000219dac                term_uswitchtable
+                0x0000000000219bc8                term_switchtable
+                0x0000000000219f44                term_destroy
+ .text          0x0000000000219f7c      0xb84 train.o
+                0x000000000021a648                train_setspeed
+                0x000000000021aae0                train_askdump
+                0x000000000021a4a8                train_init
+                0x000000000021a998                train_poll
+                0x000000000021a884                train_reverse
+                0x000000000021a78c                train_setgate
+ .text          0x000000000021ab00      0x918 ../lib/libbufio.a(iolib.o)
+                0x000000000021af18                putw
+                0x000000000021b2d8                printf
+                0x000000000021aea4                putstr
+                0x000000000021ab00                io_init
+                0x000000000021b308                getc
+                0x000000000021b014                formatString
+                0x000000000021adc4                io_poll
+                0x000000000021ae58                puttrain
+                0x000000000021acd4                train_writepoll
+                0x000000000021ae0c                putc
+                0x000000000021b390                gettrain
+                0x000000000021ac00                term_writepoll
+ .text          0x000000000021b418      0x1f4 ../lib/libbufio.a(iobuffer.o)
+                0x000000000021b474                iobuf_init
+                0x000000000021b578                iobuf_store
+                0x000000000021b4e8                iobuf_get
+                0x000000000021b4b8                iobuf_empty
+ .text          0x000000000021b60c      0x990 ../lib/libbwio.a(bwio.o)
+                0x000000000021b9d4                bwputr
+                0x000000000021b60c                bwsetfifo
+                0x000000000021b7e0                bwputc
+                0x000000000021b6d4                bwsetspeed
+                0x000000000021b8f4                c2x
+                0x000000000021bbd8                bwgetc
+                0x000000000021bc90                bwformat
+                0x000000000021bad0                bwputw
+                0x000000000021bf64                bwprintf
+                0x000000000021b954                bwputx
+                0x000000000021ba54                bwputstr
+ .text          0x000000000021bf9c      0x6b0 ../lib/libstdlib.a(stdlib.o)
+                0x000000000021c0b4                setpos
+                0x000000000021c2b4                ishex
+                0x000000000021c5e8                bwi2a
+                0x000000000021c050                bwloadcur
+                0x000000000021c15c                memcpy
+                0x000000000021c1ec                isspace
+                0x000000000021c338                bwa2d
+                0x000000000021c260                isnum
+                0x000000000021c3e0                bwa2i
+                0x000000000021c12c                loadcur
+                0x000000000021c01c                bwsavecur
+                0x000000000021c4a4                bwui2a
+                0x000000000021c0fc                savecur
+                0x000000000021bf9c                bwcls
+                0x000000000021bfd0                bwsetpos
+                0x000000000021c084                cls
+                0x000000000021c1c4                abs
+ .text          0x000000000021c64c      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x000000000021c64c                __udivsi3
+                0x000000000021c744                __aeabi_uidivmod
+ .text          0x000000000021c75c       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x000000000021c75c                __umodsi3
+ .text          0x000000000021c828        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x000000000021c828                __aeabi_ldiv0
+                0x000000000021c828                __div0
+                0x000000000021c828                __aeabi_idiv0
+ *(.got)
+ .got           0x000000000021c82c       0x58 clock.o
+ *(.got.plt)
+ .got.plt       0x000000000021c884        0xc clock.o
+                0x000000000021c884                _GLOBAL_OFFSET_TABLE_
+ *(.rodata)
+ .rodata        0x000000000021c890       0xdc main.o
+ .rodata        0x000000000021c96c       0x1c parse.o
+ .rodata        0x000000000021c988      0x15c terminal.o
+ .rodata        0x000000000021cae4       0xec train.o
+ .rodata        0x000000000021cbd0       0x1c ../lib/libstdlib.a(stdlib.o)
+ *(.glue_7)
+ *(.glue_7t)
+
+.rel.dyn
+LOAD clock.o
+LOAD main.o
+LOAD parse.o
+LOAD terminal.o
+LOAD train.o
+LOAD ../lib/libbufio.a
+LOAD ../lib/libbwio.a
+LOAD ../lib/libstdlib.a
+LOAD /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a
+OUTPUT(kernel.elf elf32-littlearm)
+
+.comment        0x0000000000000000       0xa2
+ .comment       0x0000000000000000       0x12 clock.o
+ .comment       0x0000000000000012       0x12 main.o
+ .comment       0x0000000000000024       0x12 parse.o
+ .comment       0x0000000000000036       0x12 terminal.o
+ .comment       0x0000000000000048       0x12 train.o
+ .comment       0x000000000000005a       0x12 ../lib/libbufio.a(iolib.o)
+ .comment       0x000000000000006c       0x12 ../lib/libbufio.a(iobuffer.o)
+ .comment       0x000000000000007e       0x12 ../lib/libbwio.a(bwio.o)
+ .comment       0x0000000000000090       0x12 ../lib/libstdlib.a(stdlib.o)
+
+.debug_line     0x0000000000000000      0x14f
+ .debug_line    0x0000000000000000       0x86 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+ .debug_line    0x0000000000000086       0x6f /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+ .debug_line    0x00000000000000f5       0x5a /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+
+.debug_info     0x0000000000000000      0x153
+ .debug_info    0x0000000000000000       0x71 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+ .debug_info    0x0000000000000071       0x71 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+ .debug_info    0x00000000000000e2       0x71 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+
+.debug_abbrev   0x0000000000000000       0x3c
+ .debug_abbrev  0x0000000000000000       0x14 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x0000000000000014       0x14 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+ .debug_abbrev  0x0000000000000028       0x14 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+
+.debug_aranges  0x0000000000000000       0x60
+ .debug_aranges
+                0x0000000000000000       0x20 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+ .debug_aranges
+                0x0000000000000020       0x20 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+ .debug_aranges
+                0x0000000000000040       0x20 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)

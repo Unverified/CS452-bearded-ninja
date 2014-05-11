@@ -169,9 +169,11 @@ int train_setgate( int gate, int state ) {
     enum SWITCH_STATE eState;
     switch( state ) {
     case 'S':
+    case 's':
         eState = STRAIT;
         break;
     case 'C':
+    case 'c':
         eState = CURVED;
         break;
     default:

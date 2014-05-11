@@ -49,6 +49,8 @@ int inc_switchstore() {
 
 int init() {
     int i;
+    char c;
+
     int result = io_init();
     if( result ) return 1;
 
@@ -68,7 +70,7 @@ int init() {
     result = term_init();
     if( result ) return 3;
 
-    gettrain( &i );
+    gettrain( &c );
     switch_index = 0;
     switch_head = 0;
 
@@ -103,7 +105,8 @@ int run_command( char command[] ) {
         printf( "SHUTTING DOWN\n" );
         break;
     default:
-        printf( "UNKNOWN COMMAND\n" );
+        printf( "UNKNOWN COMMAND:\n" );
+        printf( command );
         break;
     }
 
@@ -151,7 +154,6 @@ int main( int argc, char* argv[] ) {
     unsigned int request = 1;
 
     char command[COMMAND_SIZE+1];
-
     for( i = 0 ; i < COMMAND_SIZE+1; i++ ) {
         command[i] = '\0';
     }
@@ -161,31 +163,48 @@ int main( int argc, char* argv[] ) {
         return result;
     }
 
+    /*
+    clock_t4enable();
+    unsigned int worst_try = 0;
+    unsigned int last_try = clock_t4tick();
+    */
+
     while( running ) {
+        /*
+        unsigned int try = clock_t4tick();
+        if( (try-last_try) > worst_try ) worst_try = try - last_try;
+        last_try = try;
+        */
+
         result = io_poll();
         if( result >> 2 ) {
             if( !getc( &c ) && c != 0x1B ) {
-                putc( c );
-                command[inputloc++] = c;
-
                 switch( c ) {
-                case '\b': 
-                    putc( ' ' );
+                case '\b':
                   if( inputloc == 0 ) break;
                     putc( '\b' );
-                    inputloc -= 2;
+                    putc( ' ' );
+                    putc( '\b' );
+                    command[--inputloc] = '\0';
                   break;
                 case '\r':
+                    putc( c );
+                    command[inputloc++] = c;
                     print_label = 1;
                     command[inputloc] = '\0';
                     run_command( command );
                     inputloc = 0;
                   break;
+                default:
+                    if( inputloc == COMMAND_SIZE-1 ) {
+                        putc( '\b' );
+                    } else { 
+                        inputloc++;
+                    }
+
+                    putc( c );
+                    command[inputloc-1] = c;
                 }
-            }
-            if( inputloc == COMMAND_SIZE ) {
-                inputloc--;
-                putc( '\b' ); 
             }
         }
 
@@ -224,7 +243,16 @@ int main( int argc, char* argv[] ) {
 
             savecur();
             setpos( 0, 0 );
-            printf( "%d %d %d\n\r", mins, secs, tenths );
+
+            printf( "%d %d %d", mins, secs, tenths );
+            /*
+            setpos( 6, 70 );
+            printf( "%d", worst_try );
+            setpos( 7, 70 );
+            printf( "%d", try );
+            setpos( 8, 70 );
+            printf( "%d", last_try );
+            */
             loadcur();
 
             result = train_poll();

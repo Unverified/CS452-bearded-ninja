@@ -16,8 +16,9 @@ inc_bufcount:
 	ldr	r3, [fp, #-16]
 	add	r3, r3, #1
 	str	r3, [fp, #-16]
-	ldr	r3, [fp, #-16]
-	cmp	r3, #99
+	ldr	r2, [fp, #-16]
+	ldr	r3, .L5
+	cmp	r2, r3
 	bls	.L2
 	mov	r3, #0
 	str	r3, [fp, #-16]
@@ -27,6 +28,10 @@ inc_bufcount:
 	str	r3, [r2, #0]
 	sub	sp, fp, #12
 	ldmfd	sp, {fp, sp, pc}
+.L6:
+	.align	2
+.L5:
+	.word	511
 	.size	inc_bufcount, .-inc_bufcount
 	.align	2
 	.global	iobuf_init
@@ -86,11 +91,11 @@ iobuf_get:
 	ldr	r3, [fp, #-16]
 	ldr	r3, [r3, #8]
 	cmp	r3, #0
-	bne	.L10
+	bne	.L12
 	mov	r3, #42
 	str	r3, [fp, #-24]
-	b	.L12
-.L10:
+	b	.L14
+.L12:
 	ldr	r3, [fp, #-16]
 	ldr	r1, [r3, #0]
 	ldr	r3, [fp, #-16]
@@ -110,7 +115,7 @@ iobuf_get:
 	str	r2, [r3, #8]
 	mov	r3, #0
 	str	r3, [fp, #-24]
-.L12:
+.L14:
 	ldr	r3, [fp, #-24]
 	mov	r0, r3
 	sub	sp, fp, #12
@@ -131,12 +136,12 @@ iobuf_store:
 	strb	r3, [fp, #-20]
 	ldr	r3, [fp, #-16]
 	ldr	r3, [r3, #8]
-	cmp	r3, #100
-	bne	.L15
+	cmp	r3, #512
+	bne	.L17
 	mov	r3, #43
 	str	r3, [fp, #-24]
-	b	.L17
-.L15:
+	b	.L19
+.L17:
 	ldr	r3, [fp, #-16]
 	ldr	r1, [r3, #4]
 	ldr	r3, [fp, #-16]
@@ -156,7 +161,7 @@ iobuf_store:
 	str	r2, [r3, #8]
 	mov	r3, #0
 	str	r3, [fp, #-24]
-.L17:
+.L19:
 	ldr	r3, [fp, #-24]
 	mov	r0, r3
 	sub	sp, fp, #12
