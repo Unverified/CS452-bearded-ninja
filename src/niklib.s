@@ -1,4 +1,4 @@
-	.file	"stdlib.c"
+	.file	"niklib.c"
 	.section	.rodata
 	.align	2
 .LC0:
@@ -144,6 +144,11 @@ cls:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L23+8)
 	.word	.LC0(GOTOFF)
 	.size	cls, .-cls
+	.section	.rodata
+	.align	2
+.LC4:
+	.ascii	"%d;%d\000"
+	.text
 	.align	2
 	.global	setpos
 	.type	setpos, %function
@@ -159,19 +164,25 @@ setpos:
 	add	sl, pc, sl
 	str	r0, [fp, #-20]
 	str	r1, [fp, #-24]
+	mov	r0, #27
+	bl	putc(PLT)
+	mov	r0, #91
+	bl	putc(PLT)
 	ldr	r3, .L29+4
 	add	r3, sl, r3
 	mov	r0, r3
 	ldr	r1, [fp, #-20]
 	ldr	r2, [fp, #-24]
 	bl	printf(PLT)
+	mov	r0, #72
+	bl	putc(PLT)
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
 .L30:
 	.align	2
 .L29:
 	.word	_GLOBAL_OFFSET_TABLE_-(.L28+8)
-	.word	.LC1(GOTOFF)
+	.word	.LC4(GOTOFF)
 	.size	setpos, .-setpos
 	.align	2
 	.global	savecur
@@ -188,7 +199,7 @@ savecur:
 	ldr	r3, .L34+4
 	add	r3, sl, r3
 	mov	r0, r3
-	bl	printf(PLT)
+	bl	putstr(PLT)
 	ldmfd	sp, {sl, fp, sp, pc}
 .L35:
 	.align	2
@@ -211,7 +222,7 @@ loadcur:
 	ldr	r3, .L39+4
 	add	r3, sl, r3
 	mov	r0, r3
-	bl	printf(PLT)
+	bl	putstr(PLT)
 	ldmfd	sp, {sl, fp, sp, pc}
 .L40:
 	.align	2

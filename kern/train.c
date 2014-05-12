@@ -182,7 +182,7 @@ int train_setgate( int gate, int state ) {
     }
 
     printf( "Setting Gate %d: %c\n", gate, (char)state );
-    return _setgate( gate, state );
+    return _setgate( gate, eState );
 }
 
 int train_reverse( int train ) {
@@ -198,7 +198,7 @@ int train_reverse( int train ) {
     }
     
     state->reversing = 1;
-    state->waittill = clock_ticks + 40;
+    state->waittill = clock_ticks + 50;
 
     puttrain( 0 );
     puttrain( train );

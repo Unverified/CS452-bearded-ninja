@@ -160,20 +160,9 @@ int main( int argc, char* argv[] ) {
         return result;
     }
 
-    /*
-    clock_t4enable();
-    unsigned int worst_try = 0;
-    unsigned int last_try = clock_t4tick();
-    */
-    debug_init();
+//    debug_init();
     while( running ) {
-        debug_loop();
-
-        /*
-        unsigned int try = clock_t4tick();
-        if( (try-last_try) > worst_try ) worst_try = try - last_try;
-        last_try = try;
-        */
+//        debug_loop();
 
         result = io_poll();
         if( result >> 2 ) {
@@ -209,6 +198,8 @@ int main( int argc, char* argv[] ) {
 
         if( result & 3 ) {
             if( !gettrain( &c ) ) {
+                //debug_responce();
+
                 savecur();
                 if( switches[switch_index] != c ) {
                     i = 1;
@@ -231,6 +222,7 @@ int main( int argc, char* argv[] ) {
                 }
                 if( inc_switchread() ) {
                     request = 1;
+                    //debug_allresponces();
                 }
                 loadcur();
             }
@@ -241,18 +233,9 @@ int main( int argc, char* argv[] ) {
             clock_get( &mins, &secs, &tenths );
 
             savecur();
-            setpos( 0, 0 );
-
-            printf( "%d %d %d", mins, secs, tenths );
-            /*
-            setpos( 6, 70 );
-            printf( "%d", worst_try );
-            setpos( 7, 70 );
-            printf( "%d", try );
-            setpos( 8, 70 );
-            printf( "%d", last_try );
-            */
-            debug_print();
+            setpos( 0, 7 );
+            printf( "%d:%d.%d", mins, secs, tenths );
+//            debug_print();
             loadcur();
 
             result = train_poll();
@@ -260,6 +243,7 @@ int main( int argc, char* argv[] ) {
 
         if( request ) {
             train_askdump();
+            //debug_pollsent();
             request = 0;
         }
         

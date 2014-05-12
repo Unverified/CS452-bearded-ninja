@@ -26,8 +26,8 @@ BWIO_DEP = bwio.o
 BUFIO = bufio.a
 BUFIO_DEP = iolib.o iobuffer.o
 
-STDLIB = stdlib.a
-STDLIB_DEP = stdlib.o
+STDLIB = niklib.a
+STDLIB_DEP = niklib.o
 
 all: $(STDLIB) $(BWIO) $(BUFIO) 
 

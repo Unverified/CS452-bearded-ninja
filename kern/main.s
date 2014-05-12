@@ -590,7 +590,7 @@ printTrippedSwitchs:
 	.section	.rodata
 	.align	2
 .LC9:
-	.ascii	"%d %d %d\000"
+	.ascii	"%d:%d.%d\000"
 	.align	2
 .LC10:
 	.ascii	"TERM> \000"
@@ -645,15 +645,11 @@ main:
 	str	r3, [fp, #-24]
 	ldr	r3, [fp, #-24]
 	cmp	r3, #0
-	beq	.L76
+	beq	.L112
 	ldr	r1, [fp, #-24]
 	str	r1, [fp, #-148]
 	b	.L78
-.L76:
-	bl	debug_init(PLT)
-	b	.L112
 .L80:
-	bl	debug_loop(PLT)
 	bl	io_poll(PLT)
 	mov	r3, r0
 	str	r3, [fp, #-24]
@@ -871,7 +867,7 @@ main:
 	bl	clock_get(PLT)
 	bl	savecur(PLT)
 	mov	r0, #0
-	mov	r1, #0
+	mov	r1, #7
 	bl	setpos(PLT)
 	ldr	r2, [fp, #-52]
 	ldr	ip, [fp, #-48]
@@ -883,7 +879,6 @@ main:
 	mov	r2, ip
 	mov	r3, lr
 	bl	printf(PLT)
-	bl	debug_print(PLT)
 	bl	loadcur(PLT)
 	bl	train_poll(PLT)
 	mov	r3, r0

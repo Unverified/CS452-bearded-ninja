@@ -24,15 +24,18 @@ void cls() {
 }
 
 void setpos( int col, int row ) {
-    printf( "\x1B[%d;%dH", col, row );
+    putc( '\x1B' );
+    putc( '[' );
+    printf( "%d;%d", col, row );
+    putc( 'H' );
 }
 
 void savecur() {
-    printf( "\x1B[s" );
+    putstr( "\x1B[s" );
 }
 
 void loadcur() {
-    printf( "\x1B[u" );
+    putstr( "\x1B[u" );
 }
 
 void memcpy( char *destaddr, char *srcaddr, int len ) {

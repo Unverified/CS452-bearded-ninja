@@ -741,9 +741,8 @@ train_setgate:
 	mov	r0, r3
 	ldr	r1, [fp, #-24]
 	bl	printf(PLT)
-	ldr	r3, [fp, #-28]
 	ldr	r0, [fp, #-24]
-	mov	r1, r3
+	ldr	r1, [fp, #-20]
 	bl	_setgate(PLT)
 	mov	r3, r0
 	str	r3, [fp, #-32]
@@ -818,7 +817,7 @@ train_reverse:
 	ldr	r3, .L110+12
 	ldr	r3, [sl, r3]
 	ldr	r3, [r3, #0]
-	add	r2, r3, #40
+	add	r2, r3, #50
 	ldr	r3, [fp, #-20]
 	str	r2, [r3, #8]
 	mov	r0, #0
